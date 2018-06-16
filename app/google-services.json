@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "58781940552",
+    "firebase_url": "https://movielistexample.firebaseio.com",
+    "project_id": "movielistexample",
+    "storage_bucket": "movielistexample.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:58781940552:android:192bb8d8ce7a46a5",
+        "android_client_info": {
+          "package_name": "com.example.toni.movielist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "58781940552-kigll1tl8hiq6ibid2aqqvldd1hvu6di.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.toni.movielist",
+            "certificate_hash": "8eacade44cf5ee576541b35c21a1ed1e1db3d9b4"
+          }
+        },
+        {
+          "client_id": "58781940552-l8ar7fmbkhn9eupvpao1j8bikgacbjv6.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "58781940552-l8ar7fmbkhn9eupvpao1j8bikgacbjv6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIITtOhxoSbkSegKZOV6eXRrdSojeVMfs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "58781940552-l8ar7fmbkhn9eupvpao1j8bikgacbjv6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
