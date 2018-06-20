@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MovieList</string>
+    <string name="not_now_btn_text"><u>Not now</u></string>
+    <string name="no_internet_connection_text">Please connect to the internet.</string>
 </resources>
