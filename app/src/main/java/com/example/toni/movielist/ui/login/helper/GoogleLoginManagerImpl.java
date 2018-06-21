@@ -2,7 +2,7 @@ package com.example.toni.movielist.ui.login.helper;
 
 import android.content.Intent;
 
-import com.example.toni.movielist.ui.login.AuthCallback;
+import com.example.toni.movielist.ui.login.LoginActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -22,9 +22,9 @@ public class GoogleLoginManagerImpl implements GoogleLoginManager {
     }
 
     @Override
-    public void onResult(Intent data) {
+    public void onResult(Intent data, AuthCallback callback) {
         if (data != null){
-            processResult(data);
+            processResult(data, callback);
         }else {
             showError();
         }
@@ -33,12 +33,12 @@ public class GoogleLoginManagerImpl implements GoogleLoginManager {
     private void showError() {
     }
 
-    private void processResult(Intent data) {
+    private void processResult(Intent data, AuthCallback callback) {
         GoogleSignInResult loginResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
         if (loginResult.isSuccess()){
-
+            callback.onLoginSuccess(loginResult.getSignInAccount().getDisplayName());
         }else {
-            showError();
+            callback.onLoginFailed(loginResult.getStatus().getStatusMessage());
         }
     }
 }

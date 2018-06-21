@@ -1,7 +1,6 @@
 package com.example.toni.movielist.ui.login;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -9,30 +8,12 @@ import android.widget.Toast;
 import com.example.toni.movielist.App;
 import com.example.toni.movielist.Constants;
 import com.example.toni.movielist.R;
-import com.example.toni.movielist.interaction.LoginInteractorImpl;
 import com.example.toni.movielist.presentation.LoginPresenter;
-import com.example.toni.movielist.presentation.LoginPresenterImpl;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
-import com.example.toni.movielist.ui.login.helper.GoogleLoginManagerImpl;
 import com.example.toni.movielist.ui.main.MovieListActivity;
 import com.example.toni.movielist.utils.NetworkUtils;
 import com.example.toni.movielist.view.LoginView;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 
 import javax.inject.Inject;
 
@@ -79,13 +60,21 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
 
     @OnClick(R.id.not_now_textview)
     public void onNotNowTvClicked(){
-        proceedToMovieListActivity();
+        startMovieListActivity();
     }
 
-    private void proceedToMovieListActivity() {
+
+    @Override
+    public void showUserLogInErrorMessage(String errorMsg) {
+
+    }
+
+    @Override
+    public void startMovieListActivity() {
         startActivity(new Intent(this, MovieListActivity.class));
         finish();
     }
+
 
     private void signInWithGoogle() {
         startActivityForResult(googleLoginManager.getLoginIntent(), Constants.GOOGLE_SIGN_IN_RC);
@@ -95,7 +84,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.GOOGLE_SIGN_IN_RC) {
-            googleLoginManager.onResult(data);
+            presenter.loginUserWithGoogle(data);
         }
     }
 }

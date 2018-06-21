@@ -2,6 +2,7 @@ package com.example.toni.movielist.di.module;
 
 import com.example.toni.movielist.presentation.LoginPresenter;
 import com.example.toni.movielist.presentation.LoginPresenterImpl;
+import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
 
 import dagger.Module;
 import dagger.Provides;
@@ -10,8 +11,8 @@ import dagger.Provides;
 public class PresenterModule {
 
     @Provides
-    public LoginPresenter provideLoginPresenter(){
-        return new LoginPresenterImpl();
+    public LoginPresenter provideLoginPresenter(GoogleLoginManager googleLoginManager){
+        return new LoginPresenterImpl(googleLoginManager);
     }
 
 }
