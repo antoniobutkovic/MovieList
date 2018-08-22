@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,6 +38,9 @@ public class UpcomingMoviesFragment extends Fragment implements MoviesView, Movi
     @BindView(R.id.movies_recyclerview)
     RecyclerView moviesRecyclerView;
 
+    @BindView(R.id.movies_swipetorefresh)
+    SwipeRefreshLayout refreshLayout;
+
     private List<Movie> movies;
     private MovieRecyclerAdapter movieRecyclerAdapter;
 
@@ -54,6 +58,13 @@ public class UpcomingMoviesFragment extends Fragment implements MoviesView, Movi
         App.getComponent().inject(this);
         presenter.setView(this);
         initRecyclerView();
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getMovies();
+            }
+        });
     }
 
     private void initRecyclerView() {
@@ -65,17 +76,22 @@ public class UpcomingMoviesFragment extends Fragment implements MoviesView, Movi
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getUpcomingMovies(1);
+        getMovies();
     }
 
-    public static Fragment newInstance() {
-        return new UpcomingMoviesFragment();
+    private void getMovies(){
+        presenter.getUpcomingMovies(1);
     }
 
     @Override
     public void showMovies(MovieResponse movieResponse) {
         movies = movieResponse.getMovies();
         movieRecyclerAdapter.updateMovies(movies);
+    }
+
+    @Override
+    public void hideRefreshingBar() {
+        refreshLayout.setRefreshing(false);
     }
 
     @Override

@@ -60,6 +60,7 @@ public class MoviesPresenterImpl implements MoviesPresenter{
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     view.showMovies(response.body());
+                    view.hideRefreshingBar();
                 }
             }
 
