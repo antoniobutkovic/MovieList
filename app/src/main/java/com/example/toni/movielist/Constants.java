@@ -12,4 +12,5 @@ public class Constants {
     public static final String IMAGES_BASE_URL = "https://image.tmdb.org/t/p/w500";
     public static final String API_KEY = "ebb765e93a8030ab230770e97101e327";
     public static final int SPAN_COUNT_RV = 2;
+    public static final String MOVIE_ID = "movieid";
 }

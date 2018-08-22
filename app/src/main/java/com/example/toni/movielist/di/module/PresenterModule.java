@@ -3,6 +3,8 @@ package com.example.toni.movielist.di.module;
 import com.example.toni.movielist.interaction.ApiInteractor;
 import com.example.toni.movielist.presentation.LoginPresenter;
 import com.example.toni.movielist.presentation.LoginPresenterImpl;
+import com.example.toni.movielist.presentation.MovieDetailsPresenter;
+import com.example.toni.movielist.presentation.MovieDetailsPresenterImpl;
 import com.example.toni.movielist.presentation.MoviesPresenter;
 import com.example.toni.movielist.presentation.MoviesPresenterImpl;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
@@ -21,6 +23,11 @@ public class PresenterModule {
     @Provides
     MoviesPresenter provideMoviesPresenter(ApiInteractor apiInteractor){
         return new MoviesPresenterImpl(apiInteractor);
+    }
+
+    @Provides
+    MovieDetailsPresenter provideMovieDetailsPresenter(ApiInteractor apiInteractor){
+        return new MovieDetailsPresenterImpl(apiInteractor);
     }
 
 }

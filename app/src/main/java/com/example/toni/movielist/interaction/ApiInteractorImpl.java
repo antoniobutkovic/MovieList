@@ -1,6 +1,7 @@
 package com.example.toni.movielist.interaction;
 
 import com.example.toni.movielist.Constants;
+import com.example.toni.movielist.model.MovieDetailsResponse;
 import com.example.toni.movielist.model.MovieResponse;
 import com.example.toni.movielist.network.ApiService;
 
@@ -27,5 +28,10 @@ public class ApiInteractorImpl implements ApiInteractor{
     @Override
     public void getUpcomingMovies(int page, Callback<MovieResponse> callback) {
         apiService.getUpcomingMovies(Constants.API_KEY, page).enqueue(callback);
+    }
+
+    @Override
+    public void getMovieDetails(int movieId, Callback<MovieDetailsResponse> callback) {
+        apiService.getMovieDetails(movieId, Constants.API_KEY).enqueue(callback);
     }
 }

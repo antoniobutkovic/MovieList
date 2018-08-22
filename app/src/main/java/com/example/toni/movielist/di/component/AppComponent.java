@@ -3,6 +3,7 @@ package com.example.toni.movielist.di.component;
 import com.example.toni.movielist.App;
 import com.example.toni.movielist.di.module.InteractorModule;
 import com.example.toni.movielist.di.module.PresenterModule;
+import com.example.toni.movielist.ui.details.DetailsActivity;
 import com.example.toni.movielist.ui.login.LoginActivity;
 import com.example.toni.movielist.ui.main.favorite.FavoriteMoviesFragment;
 import com.example.toni.movielist.ui.main.nowplaying.NowPlayingMoviesFragment;
@@ -28,5 +29,7 @@ public interface AppComponent {
     void inject(TopRatedMoviesFragment topRatedMoviesFragment);
 
     void inject(FavoriteMoviesFragment favoriteMoviesFragment);
+
+    void inject(DetailsActivity detailsActivity);
 
 }

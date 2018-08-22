@@ -1,5 +1,6 @@
 package com.example.toni.movielist.ui.main.upcoming;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import com.example.toni.movielist.listener.MovieClickListener;
 import com.example.toni.movielist.model.Movie;
 import com.example.toni.movielist.model.MovieResponse;
 import com.example.toni.movielist.presentation.MoviesPresenter;
+import com.example.toni.movielist.ui.details.DetailsActivity;
 import com.example.toni.movielist.ui.main.adapter.MovieRecyclerAdapter;
 import com.example.toni.movielist.view.MoviesView;
 
@@ -78,6 +80,12 @@ public class UpcomingMoviesFragment extends Fragment implements MoviesView, Movi
 
     @Override
     public void onMovieClicked(int movieId) {
+        startDetailsActivity(movieId);
+    }
 
+    private void startDetailsActivity(int movieId) {
+        Intent intent = new Intent(getActivity(), DetailsActivity.class);
+        intent.putExtra(Constants.MOVIE_ID, movieId);
+        startActivity(intent);
     }
 }
