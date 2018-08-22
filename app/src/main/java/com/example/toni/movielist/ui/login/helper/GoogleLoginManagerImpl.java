@@ -2,7 +2,7 @@ package com.example.toni.movielist.ui.login.helper;
 
 import android.content.Intent;
 
-import com.example.toni.movielist.ui.login.LoginActivity;
+import com.example.toni.movielist.ui.login.AuthCallback;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;

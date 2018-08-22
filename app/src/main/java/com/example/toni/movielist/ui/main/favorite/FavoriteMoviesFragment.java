@@ -1,4 +1,4 @@
-package com.example.toni.movielist.ui.main.fragments;
+package com.example.toni.movielist.ui.main.favorite;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,12 +10,12 @@ import android.view.ViewGroup;
 
 import com.example.toni.movielist.R;
 
-public class UpcomingMoviesFragment extends Fragment{
+public class FavoriteMoviesFragment extends Fragment{
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment, container, false);
+        return inflater.inflate(R.layout.movies_fragment, container, false);
     }
 
     @Override
@@ -24,6 +24,7 @@ public class UpcomingMoviesFragment extends Fragment{
     }
 
     public static Fragment newInstance() {
-        return new UpcomingMoviesFragment();
+        return new FavoriteMoviesFragment();
     }
+
 }

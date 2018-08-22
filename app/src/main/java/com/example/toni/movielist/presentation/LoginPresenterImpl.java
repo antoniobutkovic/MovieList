@@ -2,7 +2,7 @@ package com.example.toni.movielist.presentation;
 
 import android.content.Intent;
 
-import com.example.toni.movielist.ui.login.helper.AuthCallback;
+import com.example.toni.movielist.ui.login.AuthCallback;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
 import com.example.toni.movielist.view.LoginView;
 

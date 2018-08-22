@@ -1,4 +1,4 @@
-package com.example.toni.movielist.ui.login.helper;
+package com.example.toni.movielist.ui.login;
 
 public interface AuthCallback {
 

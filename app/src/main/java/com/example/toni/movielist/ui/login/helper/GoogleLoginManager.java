@@ -2,6 +2,8 @@ package com.example.toni.movielist.ui.login.helper;
 
 import android.content.Intent;
 
+import com.example.toni.movielist.ui.login.AuthCallback;
+
 
 public interface GoogleLoginManager {
 
