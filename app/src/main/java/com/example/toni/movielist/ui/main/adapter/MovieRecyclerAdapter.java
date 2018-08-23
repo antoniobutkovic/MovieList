@@ -1,7 +1,9 @@
 package com.example.toni.movielist.ui.main.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +41,11 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
         notifyDataSetChanged();
     }
 
+    public void addMovies(List<Movie> movies){
+        mMovies.addAll(movies);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -62,6 +69,7 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
     public int getItemCount() {
         return mMovies.size();
     }
+
 
     public class MovieViewHolder extends RecyclerView.ViewHolder {
 

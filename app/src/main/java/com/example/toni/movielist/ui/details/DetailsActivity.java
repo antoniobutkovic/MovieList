@@ -3,12 +3,7 @@ package com.example.toni.movielist.ui.details;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -86,23 +81,5 @@ public class DetailsActivity extends Activity implements MovieDetailsView{
             return getIntent().getIntExtra(Constants.MOVIE_ID, -1);
         }
         return -1;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.details_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.details_refresh_menu:
-                break;
-            case R.id.details_logout_menu:
-                break;
-        }
-        return true;
     }
 }

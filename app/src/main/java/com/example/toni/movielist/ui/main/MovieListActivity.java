@@ -5,6 +5,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 
 import com.example.toni.movielist.Constants;
@@ -28,8 +31,6 @@ public class MovieListActivity extends AppCompatActivity {
     @BindView(R.id.movie_list_tab_layout)
     TabLayout tabLayout;
 
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,5 +51,21 @@ public class MovieListActivity extends AppCompatActivity {
         moviePagerAdapter.addItem(new FavoriteMoviesFragment(), Constants.MOVIE_TYPE_FAVORITE);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setAdapter(moviePagerAdapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.details_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.details_logout_menu:
+                break;
+        }
+        return true;
     }
 }

@@ -6,6 +6,8 @@ public interface MoviesView {
 
    void showMovies(MovieResponse movieResponse);
 
+   void showMoviesNextPage(MovieResponse movieResponse);
+
    void hideRefreshingBar();
 
 }

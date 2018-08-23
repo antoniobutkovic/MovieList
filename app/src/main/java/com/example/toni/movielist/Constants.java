@@ -13,4 +13,5 @@ public class Constants {
     public static final String API_KEY = "ebb765e93a8030ab230770e97101e327";
     public static final int SPAN_COUNT_RV = 2;
     public static final String MOVIE_ID = "movieid";
+    public static final int MOVIES_FIRST_PAGE = 1;
 }

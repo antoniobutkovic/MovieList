@@ -1,6 +1,7 @@
 package com.example.toni.movielist.presentation;
 
 
+import com.example.toni.movielist.Constants;
 import com.example.toni.movielist.interaction.ApiInteractor;
 import com.example.toni.movielist.model.MovieResponse;
 import com.example.toni.movielist.view.MoviesView;
@@ -25,41 +26,29 @@ public class MoviesPresenterImpl implements MoviesPresenter{
 
     @Override
     public void getUpcomingMovies(int page) {
-        apiInteractor.getUpcomingMovies(page, getUpcomingMoviesCallback());
+        apiInteractor.getUpcomingMovies(page, getUpcomingMoviesCallback(page));
     }
 
     @Override
     public void getNowPlayingMovies(int page) {
-        apiInteractor.getNowPlayingMovies(page, getNowPlayingMoviesCallback());
+        apiInteractor.getNowPlayingMovies(page, getNowPlayingMoviesCallback(page));
     }
 
     @Override
     public void getTopRatedMovies(int page) {
-        apiInteractor.getTopRatedMovies(page, getTopRatedMoviesCallback());
+        apiInteractor.getTopRatedMovies(page, getTopRatedMoviesCallback(page));
     }
 
-    public Callback<MovieResponse> getUpcomingMoviesCallback() {
+    public Callback<MovieResponse> getUpcomingMoviesCallback(final int page) {
         return new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    view.showMovies(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-            }
-        };
-    }
-
-    public Callback<MovieResponse> getNowPlayingMoviesCallback() {
-        return new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    view.showMovies(response.body());
+                    if (page > Constants.MOVIES_FIRST_PAGE){
+                        view.showMoviesNextPage(response.body());
+                    }else {
+                        view.showMovies(response.body());
+                    }
                     view.hideRefreshingBar();
                 }
             }
@@ -71,13 +60,39 @@ public class MoviesPresenterImpl implements MoviesPresenter{
         };
     }
 
-    public Callback<MovieResponse> getTopRatedMoviesCallback() {
+    public Callback<MovieResponse> getNowPlayingMoviesCallback(final int page) {
         return new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    view.showMovies(response.body());
+                    if (page > Constants.MOVIES_FIRST_PAGE){
+                        view.showMoviesNextPage(response.body());
+                    }else {
+                        view.showMovies(response.body());
+                    }
+                    view.hideRefreshingBar();
                 }
+            }
+
+            @Override
+            public void onFailure(Call<MovieResponse> call, Throwable t) {
+
+            }
+        };
+    }
+
+    public Callback<MovieResponse> getTopRatedMoviesCallback(final int page) {
+        return new Callback<MovieResponse>() {
+            @Override
+            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (page > Constants.MOVIES_FIRST_PAGE){
+                        view.showMoviesNextPage(response.body());
+                    }else {
+                        view.showMovies(response.body());
+                    }
+                    view.hideRefreshingBar();
+            }
             }
 
             @Override

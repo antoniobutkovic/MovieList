@@ -16,6 +16,7 @@ import com.example.toni.movielist.App;
 import com.example.toni.movielist.Constants;
 import com.example.toni.movielist.R;
 import com.example.toni.movielist.listener.MovieClickListener;
+import com.example.toni.movielist.listener.MoviesScrollListener;
 import com.example.toni.movielist.model.Movie;
 import com.example.toni.movielist.model.MovieResponse;
 import com.example.toni.movielist.presentation.MoviesPresenter;
@@ -43,6 +44,8 @@ public class TopRatedMoviesFragment extends Fragment implements MoviesView, Movi
 
     private List<Movie> movies;
     private MovieRecyclerAdapter movieRecyclerAdapter;
+    private int currentPage = Constants.MOVIES_FIRST_PAGE;
+    private boolean isLoading;
 
     @Nullable
     @Override
@@ -68,9 +71,42 @@ public class TopRatedMoviesFragment extends Fragment implements MoviesView, Movi
     }
 
     private void initRecyclerView() {
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), Constants.SPAN_COUNT_RV);
         movieRecyclerAdapter = new MovieRecyclerAdapter(this);
-        moviesRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), Constants.SPAN_COUNT_RV));
+        moviesRecyclerView.setOnScrollListener(new MoviesScrollListener(layoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                incrementCurrentPage();
+                getMoviesNextPage();
+                changeLoadingState(true);
+            }
+
+            @Override
+            public int getTotalPageCount() {
+                return 0;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return false;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+
+        moviesRecyclerView.setLayoutManager(layoutManager);
         moviesRecyclerView.setAdapter(movieRecyclerAdapter);
+    }
+
+    private void incrementCurrentPage() {
+        currentPage++;
+    }
+
+    private void changeLoadingState(boolean isLoading) {
+        this.isLoading = isLoading;
     }
 
     @Override
@@ -83,10 +119,20 @@ public class TopRatedMoviesFragment extends Fragment implements MoviesView, Movi
         presenter.getTopRatedMovies(1);
     }
 
+    private void getMoviesNextPage(){
+        presenter.getUpcomingMovies(currentPage);
+    }
+
     @Override
     public void showMovies(MovieResponse movieResponse) {
         movies = movieResponse.getMovies();
         movieRecyclerAdapter.updateMovies(movies);
+    }
+
+    @Override
+    public void showMoviesNextPage(MovieResponse movieResponse) {
+        changeLoadingState(false);
+        movieRecyclerAdapter.addMovies(movieResponse.getMovies());
     }
 
     @Override
