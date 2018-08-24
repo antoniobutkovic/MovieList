@@ -10,4 +10,10 @@ public interface MoviesView {
 
    void hideRefreshingBar();
 
+   void showLogoutSuccessMessage();
+
+   void showLogoutFailedMessage();
+
+   void startLoginActivity();
+
 }

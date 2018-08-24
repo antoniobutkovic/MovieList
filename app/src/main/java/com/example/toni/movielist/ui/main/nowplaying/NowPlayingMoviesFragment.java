@@ -5,12 +5,18 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.toni.movielist.App;
 import com.example.toni.movielist.Constants;
@@ -21,6 +27,7 @@ import com.example.toni.movielist.model.Movie;
 import com.example.toni.movielist.model.MovieResponse;
 import com.example.toni.movielist.presentation.MoviesPresenter;
 import com.example.toni.movielist.ui.details.DetailsActivity;
+import com.example.toni.movielist.ui.login.LoginActivity;
 import com.example.toni.movielist.ui.main.adapter.MovieRecyclerAdapter;
 import com.example.toni.movielist.view.MoviesView;
 
@@ -141,6 +148,22 @@ public class NowPlayingMoviesFragment extends Fragment implements MoviesView, Mo
     }
 
     @Override
+    public void showLogoutSuccessMessage() {
+        Toast.makeText(getActivity(), R.string.logout_success_message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showLogoutFailedMessage() {
+        Toast.makeText(getActivity(), R.string.logout_failed_message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void startLoginActivity() {
+        startActivity(new Intent(getActivity(), LoginActivity.class));
+        getActivity().finish();
+    }
+
+    @Override
     public void onMovieClicked(int movieId) {
         startDetailsActivity(movieId);
     }
@@ -149,5 +172,31 @@ public class NowPlayingMoviesFragment extends Fragment implements MoviesView, Mo
         Intent intent = new Intent(getActivity(), DetailsActivity.class);
         intent.putExtra(Constants.MOVIE_ID, movieId);
         startActivity(intent);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.details_menu, menu);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.details_search_menu));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.details_logout_menu:
+                break;
+        }
+        return true;
     }
 }

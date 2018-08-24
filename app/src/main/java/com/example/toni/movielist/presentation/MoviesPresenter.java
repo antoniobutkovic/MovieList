@@ -12,4 +12,6 @@ public interface MoviesPresenter extends BasePresenter<MoviesView>{
 
     void getTopRatedMovies(int page);
 
+    void logoutUser();
+
 }

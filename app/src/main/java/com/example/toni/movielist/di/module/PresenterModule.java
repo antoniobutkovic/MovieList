@@ -21,8 +21,8 @@ public class PresenterModule {
     }
 
     @Provides
-    MoviesPresenter provideMoviesPresenter(ApiInteractor apiInteractor){
-        return new MoviesPresenterImpl(apiInteractor);
+    MoviesPresenter provideMoviesPresenter(ApiInteractor apiInteractor, GoogleLoginManager googleLoginManager){
+        return new MoviesPresenterImpl(apiInteractor, googleLoginManager);
     }
 
     @Provides

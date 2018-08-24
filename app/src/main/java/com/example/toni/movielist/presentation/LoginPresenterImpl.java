@@ -2,7 +2,7 @@ package com.example.toni.movielist.presentation;
 
 import android.content.Intent;
 
-import com.example.toni.movielist.ui.login.AuthCallback;
+import com.example.toni.movielist.ui.login.LoginCallback;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
 import com.example.toni.movielist.view.LoginView;
 
@@ -25,8 +25,16 @@ public class LoginPresenterImpl implements LoginPresenter{
         googleLoginManager.onResult(data, getAuthCallback());
     }
 
-    public AuthCallback getAuthCallback() {
-        return new AuthCallback() {
+    @Override
+    public void checkUserAuthState() {
+        boolean isUserLoggedIn = googleLoginManager.isUserLoggedIn();
+        if (isUserLoggedIn){
+            view.startMovieListActivity();
+        }
+    }
+
+    public LoginCallback getAuthCallback() {
+        return new LoginCallback() {
             @Override
             public void onLoginSuccess(String uid) {
                 view.startMovieListActivity();

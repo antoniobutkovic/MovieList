@@ -4,6 +4,8 @@ package com.example.toni.movielist.presentation;
 import com.example.toni.movielist.Constants;
 import com.example.toni.movielist.interaction.ApiInteractor;
 import com.example.toni.movielist.model.MovieResponse;
+import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
+import com.example.toni.movielist.ui.main.LogoutCallback;
 import com.example.toni.movielist.view.MoviesView;
 
 import retrofit2.Call;
@@ -14,9 +16,11 @@ public class MoviesPresenterImpl implements MoviesPresenter{
 
     private MoviesView view;
     private ApiInteractor apiInteractor;
+    private GoogleLoginManager googleLoginManager;
 
-    public MoviesPresenterImpl(ApiInteractor apiInteractor){
+    public MoviesPresenterImpl(ApiInteractor apiInteractor, GoogleLoginManager googleLoginManager){
         this.apiInteractor = apiInteractor;
+        this.googleLoginManager = googleLoginManager;
     }
 
     @Override
@@ -37,6 +41,11 @@ public class MoviesPresenterImpl implements MoviesPresenter{
     @Override
     public void getTopRatedMovies(int page) {
         apiInteractor.getTopRatedMovies(page, getTopRatedMoviesCallback(page));
+    }
+
+    @Override
+    public void logoutUser() {
+        googleLoginManager.logoutUser(getLogoutCallback());
     }
 
     public Callback<MovieResponse> getUpcomingMoviesCallback(final int page) {
@@ -98,6 +107,21 @@ public class MoviesPresenterImpl implements MoviesPresenter{
             @Override
             public void onFailure(Call<MovieResponse> call, Throwable t) {
 
+            }
+        };
+    }
+
+    public LogoutCallback getLogoutCallback() {
+        return new LogoutCallback() {
+            @Override
+            public void onLogoutSuccess() {
+                view.showLogoutSuccessMessage();
+                view.startLoginActivity();
+            }
+
+            @Override
+            public void onLogoutFailed() {
+                view.showLogoutFailedMessage();
             }
         };
     }

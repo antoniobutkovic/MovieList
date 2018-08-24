@@ -45,6 +45,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         signInButton.setSize(SignInButton.SIZE_WIDE);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.checkUserAuthState();
+    }
+
     @OnClick(R.id.google_sign_in_button)
     public void onSignInBtnClicked(){
         if (NetworkUtils.isNetworkConnected(this)){

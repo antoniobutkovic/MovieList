@@ -1,6 +1,6 @@
 package com.example.toni.movielist.ui.login;
 
-public interface AuthCallback {
+public interface LoginCallback {
 
     void onLoginSuccess(String uid);
 
