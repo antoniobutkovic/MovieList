@@ -66,6 +66,7 @@ public class NowPlayingMoviesFragment extends Fragment implements MoviesView, Mo
         ButterKnife.bind(this, view);
         App.getComponent().inject(this);
         presenter.setView(this);
+        setHasOptionsMenu(true);
         initRecyclerView();
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -195,6 +196,7 @@ public class NowPlayingMoviesFragment extends Fragment implements MoviesView, Mo
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.details_logout_menu:
+                presenter.logoutUser();
                 break;
         }
         return true;

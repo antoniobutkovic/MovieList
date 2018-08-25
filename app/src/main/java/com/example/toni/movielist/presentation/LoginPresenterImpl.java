@@ -25,14 +25,6 @@ public class LoginPresenterImpl implements LoginPresenter{
         googleLoginManager.onResult(data, getAuthCallback());
     }
 
-    @Override
-    public void checkUserAuthState() {
-        boolean isUserLoggedIn = googleLoginManager.isUserLoggedIn();
-        if (isUserLoggedIn){
-            view.startMovieListActivity();
-        }
-    }
-
     public LoginCallback getAuthCallback() {
         return new LoginCallback() {
             @Override

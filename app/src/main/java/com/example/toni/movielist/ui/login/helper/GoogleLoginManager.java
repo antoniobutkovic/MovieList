@@ -14,6 +14,4 @@ public interface GoogleLoginManager {
 
     void logoutUser(LogoutCallback callback);
 
-    boolean isUserLoggedIn();
-
 }

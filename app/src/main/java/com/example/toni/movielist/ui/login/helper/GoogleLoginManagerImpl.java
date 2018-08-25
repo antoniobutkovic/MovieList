@@ -1,11 +1,15 @@
 package com.example.toni.movielist.ui.login.helper;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.example.toni.movielist.ui.login.LoginCallback;
 import com.example.toni.movielist.ui.main.LogoutCallback;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -20,6 +24,11 @@ public class GoogleLoginManagerImpl implements GoogleLoginManager {
 
     public GoogleLoginManagerImpl(GoogleApiClient googleApiClient){
         this.googleApiClient = googleApiClient;
+        connectApiClient();
+    }
+
+    private void connectApiClient() {
+        googleApiClient.connect();
     }
 
     @Override
@@ -50,14 +59,15 @@ public class GoogleLoginManagerImpl implements GoogleLoginManager {
         });
     }
 
-    @Override
-    public boolean isUserLoggedIn() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser == null){
+
+    public static boolean isUserLoggedIn(Context context) {
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
+        if (account == null){
             return false;
         }else {
             return true;
         }
+
     }
 
     private void showError() {

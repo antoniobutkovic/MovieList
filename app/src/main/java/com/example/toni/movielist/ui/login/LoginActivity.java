@@ -3,6 +3,7 @@ package com.example.toni.movielist.ui.login;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.toni.movielist.App;
@@ -10,6 +11,7 @@ import com.example.toni.movielist.Constants;
 import com.example.toni.movielist.R;
 import com.example.toni.movielist.presentation.LoginPresenter;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
+import com.example.toni.movielist.ui.login.helper.GoogleLoginManagerImpl;
 import com.example.toni.movielist.ui.main.MovieListActivity;
 import com.example.toni.movielist.utils.NetworkUtils;
 import com.example.toni.movielist.view.LoginView;
@@ -48,7 +50,14 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.checkUserAuthState();
+        checkUserAuthState();
+    }
+
+    private void checkUserAuthState() {
+        boolean isUserLoggedIn = GoogleLoginManagerImpl.isUserLoggedIn(this);
+        if (isUserLoggedIn){
+            startMovieListActivity();
+        }
     }
 
     @OnClick(R.id.google_sign_in_button)
@@ -80,7 +89,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         startActivity(new Intent(this, MovieListActivity.class));
         finish();
     }
-
 
     private void signInWithGoogle() {
         startActivityForResult(googleLoginManager.getLoginIntent(), Constants.GOOGLE_SIGN_IN_RC);

@@ -64,9 +64,9 @@ public class UpcomingMoviesFragment extends Fragment implements MoviesView, Movi
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         App.getComponent().inject(this);
+        setHasOptionsMenu(true);
         presenter.setView(this);
         initRecyclerView();
-
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -192,6 +192,7 @@ public class UpcomingMoviesFragment extends Fragment implements MoviesView, Movi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.details_logout_menu:
+                presenter.logoutUser();
                 break;
         }
         return true;
