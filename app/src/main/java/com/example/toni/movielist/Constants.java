@@ -14,4 +14,5 @@ public class Constants {
     public static final int SPAN_COUNT_RV = 2;
     public static final String MOVIE_ID = "movieid";
     public static final int MOVIES_FIRST_PAGE = 1;
+    public static final String SEARCH_QUERY = "searchquery";
 }

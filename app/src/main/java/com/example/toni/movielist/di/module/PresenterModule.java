@@ -7,6 +7,8 @@ import com.example.toni.movielist.presentation.MovieDetailsPresenter;
 import com.example.toni.movielist.presentation.MovieDetailsPresenterImpl;
 import com.example.toni.movielist.presentation.MoviesPresenter;
 import com.example.toni.movielist.presentation.MoviesPresenterImpl;
+import com.example.toni.movielist.presentation.SearchPresenter;
+import com.example.toni.movielist.presentation.SearchPresenterImpl;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
 
 import dagger.Module;
@@ -28,6 +30,11 @@ public class PresenterModule {
     @Provides
     MovieDetailsPresenter provideMovieDetailsPresenter(ApiInteractor apiInteractor){
         return new MovieDetailsPresenterImpl(apiInteractor);
+    }
+
+    @Provides
+    SearchPresenter provideSearchPresenter(ApiInteractor apiInteractor){
+        return new SearchPresenterImpl(apiInteractor);
     }
 
 }

@@ -15,4 +15,6 @@ public interface ApiInteractor {
 
     void getMovieDetails(int movieId, Callback<MovieDetailsResponse> callback);
 
+    void getSearchedMovies(int page, Callback<MovieResponse> callback, String query);
+
 }

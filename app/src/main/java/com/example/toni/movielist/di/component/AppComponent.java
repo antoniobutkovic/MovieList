@@ -9,6 +9,7 @@ import com.example.toni.movielist.ui.main.favorite.FavoriteMoviesFragment;
 import com.example.toni.movielist.ui.main.nowplaying.NowPlayingMoviesFragment;
 import com.example.toni.movielist.ui.main.toprated.TopRatedMoviesFragment;
 import com.example.toni.movielist.ui.main.upcoming.UpcomingMoviesFragment;
+import com.example.toni.movielist.ui.search.SearchActivity;
 
 import javax.inject.Singleton;
 
@@ -31,5 +32,7 @@ public interface AppComponent {
     void inject(FavoriteMoviesFragment favoriteMoviesFragment);
 
     void inject(DetailsActivity detailsActivity);
+
+    void inject(SearchActivity searchActivity);
 
 }

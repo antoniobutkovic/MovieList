@@ -34,4 +34,9 @@ public class ApiInteractorImpl implements ApiInteractor{
     public void getMovieDetails(int movieId, Callback<MovieDetailsResponse> callback) {
         apiService.getMovieDetails(movieId, Constants.API_KEY).enqueue(callback);
     }
+
+    @Override
+    public void getSearchedMovies(int page, Callback<MovieResponse> callback, String query) {
+        apiService.getSearchedMovies(Constants.API_KEY, query, page).enqueue(callback);
+    }
 }

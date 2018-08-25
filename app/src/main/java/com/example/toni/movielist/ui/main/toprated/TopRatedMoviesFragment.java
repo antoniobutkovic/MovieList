@@ -29,6 +29,7 @@ import com.example.toni.movielist.presentation.MoviesPresenter;
 import com.example.toni.movielist.ui.details.DetailsActivity;
 import com.example.toni.movielist.ui.login.LoginActivity;
 import com.example.toni.movielist.ui.main.adapter.MovieRecyclerAdapter;
+import com.example.toni.movielist.ui.search.SearchActivity;
 import com.example.toni.movielist.view.MoviesView;
 
 import java.util.List;
@@ -140,7 +141,7 @@ public class TopRatedMoviesFragment extends Fragment implements MoviesView, Movi
     @Override
     public void showMoviesNextPage(MovieResponse movieResponse) {
         changeLoadingState(false);
-        movieRecyclerAdapter.addMovies(movieResponse.getMovies());
+        movieRecyclerAdapter.addMoreMovies(movieResponse.getMovies());
     }
 
     @Override
@@ -177,25 +178,33 @@ public class TopRatedMoviesFragment extends Fragment implements MoviesView, Movi
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.details_menu, menu);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.details_search_menu));
+        inflater.inflate(R.menu.options_menu, menu);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.options_search_menu));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                startSearchActivity(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                movieRecyclerAdapter.getFilter().filter(newText);
                 return false;
             }
         });
     }
 
+    private void startSearchActivity(String query) {
+        Intent intent = new Intent(getActivity(), SearchActivity.class);
+        intent.putExtra(Constants.SEARCH_QUERY, query);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.details_logout_menu:
+            case R.id.options_logout_menu:
                 presenter.logoutUser();
                 break;
         }

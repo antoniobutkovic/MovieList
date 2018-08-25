@@ -22,6 +22,7 @@
 
         <activity android:name=".ui.main.MovieListActivity"></activity>
         <activity android:name=".ui.details.DetailsActivity"></activity>
+        <activity android:name=".ui.search.SearchActivity"></activity>
 
     </application>
 

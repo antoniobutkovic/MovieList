@@ -4,10 +4,10 @@
 
     <item
         android:title="Logout"
-        android:id="@+id/details_logout_menu">
+        android:id="@+id/options_logout_menu">
     </item>
 
-    <item android:id="@+id/details_search_menu"
+    <item android:id="@+id/options_search_menu"
         android:title="Search"
         android:icon="@drawable/ic_search_white_24dp"
         app:showAsAction="ifRoom|collapseActionView"

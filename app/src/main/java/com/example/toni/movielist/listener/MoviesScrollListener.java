@@ -1,14 +1,13 @@
 package com.example.toni.movielist.listener;
 
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 public abstract class MoviesScrollListener extends RecyclerView.OnScrollListener{
 
-    GridLayoutManager layoutManager;
+    LinearLayoutManager layoutManager;
 
-    public MoviesScrollListener(GridLayoutManager layoutManager) {
+    public MoviesScrollListener(LinearLayoutManager layoutManager) {
         this.layoutManager = layoutManager;
     }
 
