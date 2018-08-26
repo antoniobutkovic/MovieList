@@ -4,4 +4,5 @@
     <string name="no_internet_connection_text">Please connect to the internet.</string>
     <string name="logout_failed_message">Logout failed. Please try again later.</string>
     <string name="logout_success_message">Successfully signed out.</string>
+    <string name="login_first_error_message">Please login first.</string>
 </resources>

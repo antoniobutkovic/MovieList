@@ -54,6 +54,7 @@ public class NowPlayingMoviesFragment extends Fragment implements MoviesView, Mo
     private MovieRecyclerAdapter movieRecyclerAdapter;
     private int currentPage = Constants.MOVIES_FIRST_PAGE;
     private boolean isLoading;
+    private MenuItem menuItemSearch;
 
     @Nullable
     @Override
@@ -168,6 +169,7 @@ public class NowPlayingMoviesFragment extends Fragment implements MoviesView, Mo
     @Override
     public void onMovieClicked(int movieId) {
         startDetailsActivity(movieId);
+        closeSearchView();
     }
 
     private void startDetailsActivity(int movieId) {
@@ -179,17 +181,25 @@ public class NowPlayingMoviesFragment extends Fragment implements MoviesView, Mo
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.options_menu, menu);
+        menuItemSearch = menu.findItem(R.id.options_search_menu);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.options_search_menu));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 startSearchActivity(query);
+                closeSearchView();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                movieRecyclerAdapter.getFilter().filter(newText);
+                if (newText.isEmpty()){
+                    changeLoadingState(false);
+                    movieRecyclerAdapter.getFilter().filter(newText);
+                }else {
+                    changeLoadingState(true);
+                    movieRecyclerAdapter.getFilter().filter(newText);
+                }
                 return false;
             }
         });
@@ -199,6 +209,10 @@ public class NowPlayingMoviesFragment extends Fragment implements MoviesView, Mo
         Intent intent = new Intent(getActivity(), SearchActivity.class);
         intent.putExtra(Constants.SEARCH_QUERY, query);
         startActivity(intent);
+    }
+
+    private void closeSearchView() {
+        menuItemSearch.collapseActionView();
     }
 
     @Override

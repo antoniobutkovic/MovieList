@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,7 +52,7 @@ public class UpcomingMoviesFragment extends Fragment implements MoviesView, Movi
     private MovieRecyclerAdapter movieRecyclerAdapter;
     private int currentPage = Constants.MOVIES_FIRST_PAGE;
     private boolean isLoading;
-    private SearchView searchView;
+    private MenuItem menuItemSearch;
 
     @Nullable
     @Override
@@ -74,6 +75,7 @@ public class UpcomingMoviesFragment extends Fragment implements MoviesView, Movi
             }
         });
     }
+
 
     private void initRecyclerView() {
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), Constants.SPAN_COUNT_RV);
@@ -163,6 +165,7 @@ public class UpcomingMoviesFragment extends Fragment implements MoviesView, Movi
     @Override
     public void onMovieClicked(int movieId) {
         startDetailsActivity(movieId);
+        closeSearchView();
     }
 
     private void startDetailsActivity(int movieId) {
@@ -174,20 +177,32 @@ public class UpcomingMoviesFragment extends Fragment implements MoviesView, Movi
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.options_menu, menu);
-        searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.options_search_menu));
+        menuItemSearch = menu.findItem(R.id.options_search_menu);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.options_search_menu));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 startSearchActivity(query);
+                closeSearchView();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                movieRecyclerAdapter.getFilter().filter(newText);
+                if (newText.isEmpty()){
+                    changeLoadingState(false);
+                    movieRecyclerAdapter.getFilter().filter(newText);
+                }else {
+                    changeLoadingState(true);
+                    movieRecyclerAdapter.getFilter().filter(newText);
+                }
                 return false;
             }
         });
+    }
+
+    private void closeSearchView() {
+        menuItemSearch.collapseActionView();
     }
 
     private void startSearchActivity(String query) {
@@ -205,4 +220,10 @@ public class UpcomingMoviesFragment extends Fragment implements MoviesView, Movi
         }
         return true;
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
 }
