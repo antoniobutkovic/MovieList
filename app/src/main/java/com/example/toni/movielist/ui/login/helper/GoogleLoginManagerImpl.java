@@ -76,7 +76,7 @@ public class GoogleLoginManagerImpl implements GoogleLoginManager {
     private void processResult(Intent data, LoginCallback callback) {
         GoogleSignInResult loginResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
         if (loginResult.isSuccess()){
-            callback.onLoginSuccess(loginResult.getSignInAccount().getDisplayName());
+            callback.onLoginSuccess(loginResult.getSignInAccount().getId());
         }else {
             callback.onLoginFailed(loginResult.getStatus().getStatusMessage());
         }

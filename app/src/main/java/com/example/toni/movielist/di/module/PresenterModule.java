@@ -1,6 +1,9 @@
 package com.example.toni.movielist.di.module;
 
 import com.example.toni.movielist.interaction.ApiInteractor;
+import com.example.toni.movielist.interaction.FirebaseInteractor;
+import com.example.toni.movielist.presentation.FavoriteMoviesPresenter;
+import com.example.toni.movielist.presentation.FavoriteMoviesPresenterImpl;
 import com.example.toni.movielist.presentation.LoginPresenter;
 import com.example.toni.movielist.presentation.LoginPresenterImpl;
 import com.example.toni.movielist.presentation.MovieDetailsPresenter;
@@ -28,13 +31,18 @@ public class PresenterModule {
     }
 
     @Provides
-    MovieDetailsPresenter provideMovieDetailsPresenter(ApiInteractor apiInteractor){
-        return new MovieDetailsPresenterImpl(apiInteractor);
+    MovieDetailsPresenter provideMovieDetailsPresenter(ApiInteractor apiInteractor, FirebaseInteractor firebaseInteractor){
+        return new MovieDetailsPresenterImpl(apiInteractor, firebaseInteractor);
     }
 
     @Provides
     SearchPresenter provideSearchPresenter(ApiInteractor apiInteractor){
         return new SearchPresenterImpl(apiInteractor);
+    }
+
+    @Provides
+    FavoriteMoviesPresenter provideFavoriteMoviesPresenter(FirebaseInteractor firebaseInteractor, ApiInteractor apiInteractor){
+        return new FavoriteMoviesPresenterImpl(firebaseInteractor, apiInteractor);
     }
 
 }

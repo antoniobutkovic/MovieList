@@ -1,5 +1,6 @@
 package com.example.toni.movielist.network;
 
+import com.example.toni.movielist.model.Movie;
 import com.example.toni.movielist.model.MovieDetailsResponse;
 import com.example.toni.movielist.model.MovieResponse;
 
@@ -24,5 +25,8 @@ public interface ApiService {
 
     @GET("/3/search/movie?")
     Call<MovieResponse> getSearchedMovies(@Query("api_key") String api_key, @Query("query") String query, @Query("page") int page);
+
+    @GET("/3/movie/{movie_id}?")
+    Call<Movie> getMovieById(@Path("movie_id") int movieId, @Query("api_key") String api_key);
 
 }

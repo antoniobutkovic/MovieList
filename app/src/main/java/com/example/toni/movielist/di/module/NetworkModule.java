@@ -2,6 +2,8 @@ package com.example.toni.movielist.di.module;
 
 import com.example.toni.movielist.Constants;
 import com.example.toni.movielist.network.ApiService;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -47,6 +49,11 @@ public class NetworkModule {
     @Provides
     public ApiService provideApiService(Retrofit retrofit){
         return retrofit.create(ApiService.class);
+    }
+
+    @Provides
+    public DatabaseReference provideDatabaseReference(){
+        return FirebaseDatabase.getInstance().getReference().child(Constants.BASE_FB_PATH);
     }
 
 }

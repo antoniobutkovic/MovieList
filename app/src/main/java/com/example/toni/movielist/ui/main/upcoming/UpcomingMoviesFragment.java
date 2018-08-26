@@ -30,6 +30,7 @@ import com.example.toni.movielist.ui.details.DetailsActivity;
 import com.example.toni.movielist.ui.login.LoginActivity;
 import com.example.toni.movielist.ui.main.adapter.MovieRecyclerAdapter;
 import com.example.toni.movielist.ui.search.SearchActivity;
+import com.example.toni.movielist.util.SharedPrefsUtil;
 import com.example.toni.movielist.view.MoviesView;
 
 import javax.inject.Inject;
@@ -221,9 +222,5 @@ public class UpcomingMoviesFragment extends Fragment implements MoviesView, Movi
         return true;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
 
 }

@@ -3,7 +3,6 @@ package com.example.toni.movielist.ui.login;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.toni.movielist.App;
@@ -13,7 +12,8 @@ import com.example.toni.movielist.presentation.LoginPresenter;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManagerImpl;
 import com.example.toni.movielist.ui.main.MovieListActivity;
-import com.example.toni.movielist.utils.NetworkUtils;
+import com.example.toni.movielist.util.NetworkUtil;
+import com.example.toni.movielist.util.SharedPrefsUtil;
 import com.example.toni.movielist.view.LoginView;
 import com.google.android.gms.common.SignInButton;
 
@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
 
     @OnClick(R.id.google_sign_in_button)
     public void onSignInBtnClicked(){
-        if (NetworkUtils.isNetworkConnected(this)){
+        if (NetworkUtil.isNetworkConnected(this)){
             signInWithGoogle();
         }else {
             showNetworkErrorMessage();
@@ -88,6 +88,11 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
     public void startMovieListActivity() {
         startActivity(new Intent(this, MovieListActivity.class));
         finish();
+    }
+
+    @Override
+    public void storeUserLoginToken(String uid) {
+        SharedPrefsUtil.storePreferencesField(this, Constants.USER_LOGIN_TOKEN, uid);
     }
 
     private void signInWithGoogle() {

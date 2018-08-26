@@ -15,4 +15,7 @@ public class Constants {
     public static final String MOVIE_ID = "movieid";
     public static final int MOVIES_FIRST_PAGE = 1;
     public static final String SEARCH_QUERY = "searchquery";
+    public static final String BASE_FB_PATH = "MovieList";
+    public static final String MOVIE_ID_FB_PATH = "FavoriteMovieIds";
+    public static final String USER_LOGIN_TOKEN = "token";
 }

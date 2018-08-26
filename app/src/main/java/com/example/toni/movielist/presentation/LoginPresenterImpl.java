@@ -30,6 +30,7 @@ public class LoginPresenterImpl implements LoginPresenter{
             @Override
             public void onLoginSuccess(String uid) {
                 view.startMovieListActivity();
+                view.storeUserLoginToken(uid);
             }
 
             @Override

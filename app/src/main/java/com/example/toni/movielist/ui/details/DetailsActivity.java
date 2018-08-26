@@ -3,9 +3,11 @@ package com.example.toni.movielist.ui.details;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -14,12 +16,18 @@ import com.example.toni.movielist.Constants;
 import com.example.toni.movielist.R;
 import com.example.toni.movielist.model.MovieDetailsResponse;
 import com.example.toni.movielist.presentation.MovieDetailsPresenter;
+import com.example.toni.movielist.ui.login.helper.GoogleLoginManagerImpl;
+import com.example.toni.movielist.util.SharedPrefsUtil;
 import com.example.toni.movielist.view.MovieDetailsView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class DetailsActivity extends Activity implements MovieDetailsView{
 
@@ -42,6 +50,13 @@ public class DetailsActivity extends Activity implements MovieDetailsView{
     @BindView(R.id.details_poster_imageview)
     ImageView posterIv;
 
+    @BindView(R.id.details_favorite_fab)
+    FloatingActionButton favoriteMovieFab;
+
+    private List<Integer> favoriteMovieIds;
+    private boolean isFabChecked;
+    private int movieId;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +65,9 @@ public class DetailsActivity extends Activity implements MovieDetailsView{
         ButterKnife.bind(this);
         App.getComponent().inject(this);
         presenter.setView(this);
+
+        favoriteMovieIds = new ArrayList<>();
+        movieId = getMovieIdFromIntent();
     }
 
     @Override
@@ -58,13 +76,70 @@ public class DetailsActivity extends Activity implements MovieDetailsView{
         getMovieDetails();
     }
 
+    @OnClick(R.id.details_favorite_fab)
+    public void onFavoriteMovieFabClicked(){
+        if (GoogleLoginManagerImpl.isUserLoggedIn(this)){
+            if (isFabChecked){
+                changeMovieFaveStatus(false);
+                removeMovieFromFavorites(movieId);
+                presenter.updateDatabase(favoriteMovieIds, SharedPrefsUtil.getPreferencesField(this, Constants.USER_LOGIN_TOKEN));
+            }else {
+                changeMovieFaveStatus(true);
+                addMovieToFavorites(movieId);
+                presenter.updateDatabase(favoriteMovieIds, SharedPrefsUtil.getPreferencesField(this, Constants.USER_LOGIN_TOKEN));
+            }
+        }else {
+            showLoginErrorMessage();
+        }
+    }
+
+    private void showLoginErrorMessage() {
+        Toast.makeText(this, getResources().getString(R.string.login_first_error_message), Toast.LENGTH_SHORT).show();
+    }
+
+    private void addMovieToFavorites(int movieId) {
+        if (!favoriteMovieIds.contains(movieId)){
+            favoriteMovieIds.add(movieId);
+        }
+    }
+
+    private void removeMovieFromFavorites(int movieId) {
+        favoriteMovieIds.remove((Object)movieId);
+    }
+
     public void getMovieDetails() {
-        presenter.getMovieDetails(getMovieIdFromIntent());
+        presenter.getFavoriteMovieIds(SharedPrefsUtil.getPreferencesField(this, Constants.USER_LOGIN_TOKEN));
+        presenter.getMovieDetails(movieId);
     }
 
     @Override
     public void showMovieDetails(MovieDetailsResponse details) {
         setUpDetails(details);
+    }
+
+    @Override
+    public void setCurrentFavoriteMovies(List<Integer> movieIds) {
+        favoriteMovieIds = movieIds;
+    }
+
+    @Override
+    public void checkMovieFaveStatus() {
+        presenter.checkMovieFaveStatus(favoriteMovieIds, movieId);
+    }
+
+    @Override
+    public void changeMovieFaveStatus(boolean isFavorite) {
+        if (isFavorite){
+            favoriteMovieFab.setImageResource(R.drawable.ic_favorite_white_24dp);
+            changeFavoriteFabState(true);
+        }else {
+            favoriteMovieFab.setImageResource(R.drawable.ic_un_favorite_border_white_24dp);
+            changeFavoriteFabState(false);
+        }
+    }
+
+    private void changeFavoriteFabState(boolean isChecked) {
+        isFabChecked = isChecked;
     }
 
     private void setUpDetails(MovieDetailsResponse details) {
@@ -81,5 +156,11 @@ public class DetailsActivity extends Activity implements MovieDetailsView{
             return getIntent().getIntExtra(Constants.MOVIE_ID, -1);
         }
         return -1;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.onDetailsActivityDestroyed();
     }
 }

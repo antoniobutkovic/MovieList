@@ -6,4 +6,6 @@ public interface LoginView{
     void showUserLogInErrorMessage(String errorMsg);
 
     void startMovieListActivity();
+
+    void storeUserLoginToken(String uid);
 }

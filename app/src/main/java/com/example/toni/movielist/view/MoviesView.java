@@ -15,5 +15,4 @@ public interface MoviesView {
    void showLogoutFailedMessage();
 
    void startLoginActivity();
-
 }

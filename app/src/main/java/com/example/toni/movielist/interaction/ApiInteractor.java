@@ -1,5 +1,6 @@
 package com.example.toni.movielist.interaction;
 
+import com.example.toni.movielist.model.Movie;
 import com.example.toni.movielist.model.MovieDetailsResponse;
 import com.example.toni.movielist.model.MovieResponse;
 
@@ -16,5 +17,7 @@ public interface ApiInteractor {
     void getMovieDetails(int movieId, Callback<MovieDetailsResponse> callback);
 
     void getSearchedMovies(int page, Callback<MovieResponse> callback, String query);
+
+    void getMovieById(int movieId, Callback<Movie> callback);
 
 }

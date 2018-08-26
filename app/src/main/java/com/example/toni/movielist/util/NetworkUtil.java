@@ -1,12 +1,12 @@
-package com.example.toni.movielist.utils;
+package com.example.toni.movielist.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class NetworkUtils {
+public class NetworkUtil {
 
-    private NetworkUtils() {
+    private NetworkUtil() {
     }
 
     public static boolean isNetworkConnected(Context context) {
