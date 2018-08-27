@@ -60,7 +60,6 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
     private MovieRecyclerAdapter movieRecyclerAdapter;
     private boolean isLoading;
     private MenuItem menuItemSearch;
-    private List<Integer> favoriteMoviesIds;
 
     @Nullable
     @Override

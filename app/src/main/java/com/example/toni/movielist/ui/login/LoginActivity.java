@@ -3,6 +3,7 @@ package com.example.toni.movielist.ui.login;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.toni.movielist.App;
