@@ -1,9 +1,13 @@
 package com.example.toni.movielist.presentation;
 
+import android.util.Log;
+
 import com.example.toni.movielist.interaction.ApiInteractor;
 import com.example.toni.movielist.interaction.FirebaseCallback;
 import com.example.toni.movielist.interaction.FirebaseInteractor;
 import com.example.toni.movielist.model.Movie;
+import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
+import com.example.toni.movielist.ui.main.LogoutCallback;
 
 import java.util.List;
 
@@ -16,11 +20,13 @@ public class FavoriteMoviesPresenterImpl implements FavoriteMoviesPresenter{
     private FavoriteMoviesView view;
     private FirebaseInteractor firebaseInteractor;
     private ApiInteractor apiInteractor;
+    private GoogleLoginManager googleLoginManager;
 
 
-    public FavoriteMoviesPresenterImpl(FirebaseInteractor firebaseInteractor, ApiInteractor apiInteractor){
+    public FavoriteMoviesPresenterImpl(FirebaseInteractor firebaseInteractor, ApiInteractor apiInteractor, GoogleLoginManager googleLoginManager){
         this.firebaseInteractor = firebaseInteractor;
         this.apiInteractor = apiInteractor;
+        this.googleLoginManager = googleLoginManager;
     }
 
     @Override
@@ -34,20 +40,44 @@ public class FavoriteMoviesPresenterImpl implements FavoriteMoviesPresenter{
     }
 
     @Override
-    public void getFavoriteMovies(List<Integer> movieIds) {
-        for (Integer movieId : movieIds){
-            apiInteractor.getMovieById(movieId, getFavoriteMoviesCallback());
-        }
+    public void logoutUser() {
+        googleLoginManager.logoutUser(getLogoutCallback());
+    }
+
+    public LogoutCallback getLogoutCallback() {
+        return new LogoutCallback() {
+            @Override
+            public void onLogoutSuccess() {
+                view.showLogoutSuccessMessage();
+                view.startLoginActivity();
+            }
+
+            @Override
+            public void onLogoutFailed() {
+                view.showLogoutFailedMessage();
+            }
+        };
     }
 
     public FirebaseCallback getFavoriteMovieIdsCallback() {
         return new FirebaseCallback() {
             @Override
             public void onFavoriteMoviesReadFinished(List<Integer> movieIds) {
-                view.setMovieIds(movieIds);
-                view.getFavoriteMovies();
+                getFavoriteMovies(movieIds);
+            }
+
+            @Override
+            public void onFavoriteMoviesReadFailed() {
+                view.showNoFavoriteMoviesMessage();
+                view.showEmptyScreen();
             }
         };
+    }
+
+    public void getFavoriteMovies(List<Integer> movieIds) {
+        for (Integer movieId : movieIds){
+            apiInteractor.getMovieById(movieId, getFavoriteMoviesCallback());
+        }
     }
 
     public Callback<Movie> getFavoriteMoviesCallback() {
@@ -56,6 +86,7 @@ public class FavoriteMoviesPresenterImpl implements FavoriteMoviesPresenter{
             public void onResponse(Call<Movie> call, Response<Movie> response) {
                 if (response.isSuccessful() && response.body() != null){
                     view.showFavoriteMovies(response.body());
+                    view.hideNoFavoriteMoviesMessage();
                 }
             }
 

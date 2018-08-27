@@ -101,7 +101,7 @@ public class MoviesPresenterImpl implements MoviesPresenter{
                         view.showMovies(response.body());
                     }
                     view.hideRefreshingBar();
-            }
+                }
             }
 
             @Override

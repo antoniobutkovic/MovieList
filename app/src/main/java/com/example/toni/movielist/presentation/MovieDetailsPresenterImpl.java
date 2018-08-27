@@ -81,6 +81,11 @@ public class MovieDetailsPresenterImpl implements MovieDetailsPresenter{
                 view.setCurrentFavoriteMovies(movieIds);
                 view.checkMovieFaveStatus();
             }
+
+            @Override
+            public void onFavoriteMoviesReadFailed() {
+
+            }
         };
     }
 }

@@ -29,6 +29,7 @@ import com.example.toni.movielist.model.MovieResponse;
 import com.example.toni.movielist.presentation.MoviesPresenter;
 import com.example.toni.movielist.ui.details.DetailsActivity;
 import com.example.toni.movielist.ui.login.LoginActivity;
+import com.example.toni.movielist.ui.login.helper.GoogleLoginManagerImpl;
 import com.example.toni.movielist.ui.main.adapter.MovieRecyclerAdapter;
 import com.example.toni.movielist.ui.search.SearchActivity;
 import com.example.toni.movielist.view.MoviesView;
@@ -220,12 +221,20 @@ public class TopRatedMoviesFragment extends Fragment implements MoviesView, Movi
 
         switch (item.getItemId()){
             case R.id.options_logout_menu:
-                presenter.logoutUser();
+                if (GoogleLoginManagerImpl.isUserLoggedIn(getActivity())){
+                    presenter.logoutUser();
+                }else {
+                    showLoginRequiredMessage();
+                }
                 break;
             case R.id.options_search_menu:
                 break;
         }
 
         return true;
+    }
+
+    private void showLoginRequiredMessage() {
+        Toast.makeText(getActivity(), getResources().getString(R.string.login_first_error_message), Toast.LENGTH_SHORT).show();
     }
 }

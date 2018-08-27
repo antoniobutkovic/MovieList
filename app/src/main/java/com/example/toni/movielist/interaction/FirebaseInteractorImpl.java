@@ -32,6 +32,8 @@ public class FirebaseInteractorImpl implements FirebaseInteractor{
                 List<Integer> movieIds = dataSnapshot.child(userId).child(Constants.MOVIE_ID_FB_PATH).getValue(genericTypeIndicator);
                 if (movieIds != null){
                     callback.onFavoriteMoviesReadFinished(movieIds);
+                }else {
+                    callback.onFavoriteMoviesReadFailed();
                 }
             }
 

@@ -6,4 +6,5 @@ public interface FirebaseCallback {
 
     void onFavoriteMoviesReadFinished(List<Integer> movieIds);
 
+    void onFavoriteMoviesReadFailed();
 }

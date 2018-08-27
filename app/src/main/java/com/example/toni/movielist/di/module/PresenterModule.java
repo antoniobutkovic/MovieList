@@ -41,8 +41,8 @@ public class PresenterModule {
     }
 
     @Provides
-    FavoriteMoviesPresenter provideFavoriteMoviesPresenter(FirebaseInteractor firebaseInteractor, ApiInteractor apiInteractor){
-        return new FavoriteMoviesPresenterImpl(firebaseInteractor, apiInteractor);
+    FavoriteMoviesPresenter provideFavoriteMoviesPresenter(FirebaseInteractor firebaseInteractor, ApiInteractor apiInteractor, GoogleLoginManager googleLoginManager){
+        return new FavoriteMoviesPresenterImpl(firebaseInteractor, apiInteractor, googleLoginManager);
     }
 
 }

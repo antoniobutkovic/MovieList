@@ -11,12 +11,14 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.toni.movielist.App;
@@ -45,19 +47,17 @@ import butterknife.ButterKnife;
 
 public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesView, MovieClickListener {
 
-
     @Inject
     FavoriteMoviesPresenter presenter;
 
     @BindView(R.id.movies_recyclerview)
     RecyclerView moviesRecyclerView;
 
-    @BindView(R.id.movies_swipetorefresh)
-    SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.favorite_no_movies_textview)
+    TextView noFavoriteMoviesTv;
 
     private List<Movie> movies;
     private MovieRecyclerAdapter movieRecyclerAdapter;
-    private int currentPage = Constants.MOVIES_FIRST_PAGE;
     private boolean isLoading;
     private MenuItem menuItemSearch;
     private List<Integer> favoriteMoviesIds;
@@ -65,7 +65,7 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.movies_fragment, container, false);
+        return inflater.inflate(R.layout.favorite_movies_fragment, container, false);
     }
 
     @Override
@@ -76,13 +76,6 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
         setHasOptionsMenu(true);
         presenter.setView(this);
         initRecyclerView();
-
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getMovies();
-            }
-        });
     }
 
     private void initRecyclerView() {
@@ -116,7 +109,6 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
     }
 
     private void incrementCurrentPage() {
-        currentPage++;
     }
 
     private void changeLoadingState(boolean isLoading) {
@@ -147,21 +139,31 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
         presenter.getFavoriteMovieIds(SharedPrefsUtil.getPreferencesField(getActivity(), Constants.USER_LOGIN_TOKEN));
     }
 
-//    @Override
-//    public void hideRefreshingBar() {
-//        refreshLayout.setRefreshing(false);
-//    }
-//
-//    @Override
-//    public void showLogoutSuccessMessage() {
-//        Toast.makeText(getActivity(), R.string.logout_success_message, Toast.LENGTH_SHORT).show();
-//    }
-//
-//    @Override
-//    public void showLogoutFailedMessage() {
-//        Toast.makeText(getActivity(), R.string.logout_failed_message, Toast.LENGTH_SHORT).show();
-//    }
-//
+    @Override
+    public void showLogoutSuccessMessage() {
+        Toast.makeText(getActivity(), R.string.logout_success_message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showLogoutFailedMessage() {
+        Toast.makeText(getActivity(), R.string.logout_failed_message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showNoFavoriteMoviesMessage() {
+        noFavoriteMoviesTv.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideNoFavoriteMoviesMessage() {
+        noFavoriteMoviesTv.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showEmptyScreen() {
+        movieRecyclerAdapter.updateMovies(movies);
+    }
+
     @Override
     public void startLoginActivity() {
         startActivity(new Intent(getActivity(), LoginActivity.class));
@@ -222,7 +224,11 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
 
         switch (item.getItemId()){
             case R.id.options_logout_menu:
-//                presenter.logoutUser();
+                if (GoogleLoginManagerImpl.isUserLoggedIn(getActivity())){
+                    presenter.logoutUser();
+                }else {
+                    showLoginRequiredMessage();
+                }
                 break;
             case R.id.options_search_menu:
                 break;
@@ -231,14 +237,8 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
         return true;
     }
 
-    @Override
-    public void setMovieIds(List<Integer> movieIds) {
-        favoriteMoviesIds = movieIds;
-    }
-
-    @Override
-    public void getFavoriteMovies() {
-        presenter.getFavoriteMovies(favoriteMoviesIds);
+    private void showLoginRequiredMessage() {
+        Toast.makeText(getActivity(), getResources().getString(R.string.login_first_error_message), Toast.LENGTH_SHORT).show();
     }
 
     @Override
