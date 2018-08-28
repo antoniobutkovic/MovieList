@@ -1,6 +1,7 @@
 package com.example.toni.movielist.presentation;
 
 import android.content.Intent;
+import android.util.Log;
 
 import com.example.toni.movielist.ui.login.LoginCallback;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
@@ -29,8 +30,8 @@ public class LoginPresenterImpl implements LoginPresenter{
         return new LoginCallback() {
             @Override
             public void onLoginSuccess(String uid) {
-                view.startMovieListActivity();
                 view.storeUserLoginToken(uid);
+                view.startMovieListActivity();
             }
 
             @Override

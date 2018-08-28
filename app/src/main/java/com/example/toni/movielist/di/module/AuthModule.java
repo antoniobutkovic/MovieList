@@ -1,6 +1,7 @@
 package com.example.toni.movielist.di.module;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 
 import com.example.toni.movielist.R;
@@ -8,6 +9,7 @@ import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManagerImpl;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import dagger.Module;

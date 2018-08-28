@@ -29,18 +29,30 @@ public class MoviesPresenterImpl implements MoviesPresenter{
     }
 
     @Override
+    public void getMovies(int page, String moviesType) {
+        switch (moviesType){
+            case Constants.MOVIE_TYPE_UPCOMING:
+                getUpcomingMovies(page);
+                break;
+            case Constants.MOVIE_TYPE_TOP_RATED:
+                getTopRatedMovies(page);
+                break;
+            case Constants.MOVIE_TYPE_NOW_PLAYING:
+                getNowPlayingMovies(page);
+                break;
+        }
+    }
+
     public void getUpcomingMovies(int page) {
-        apiInteractor.getUpcomingMovies(page, getUpcomingMoviesCallback(page));
+        apiInteractor.getUpcomingMovies(page, getMoviesCallback(page));
     }
 
-    @Override
     public void getNowPlayingMovies(int page) {
-        apiInteractor.getNowPlayingMovies(page, getNowPlayingMoviesCallback(page));
+        apiInteractor.getNowPlayingMovies(page, getMoviesCallback(page));
     }
 
-    @Override
     public void getTopRatedMovies(int page) {
-        apiInteractor.getTopRatedMovies(page, getTopRatedMoviesCallback(page));
+        apiInteractor.getTopRatedMovies(page, getMoviesCallback(page));
     }
 
     @Override
@@ -48,49 +60,7 @@ public class MoviesPresenterImpl implements MoviesPresenter{
         googleLoginManager.logoutUser(getLogoutCallback());
     }
 
-    public Callback<MovieResponse> getUpcomingMoviesCallback(final int page) {
-        return new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    if (page > Constants.MOVIES_FIRST_PAGE){
-                        view.showMoviesNextPage(response.body());
-                    }else {
-                        view.showMovies(response.body());
-                    }
-                    view.hideRefreshingBar();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-            }
-        };
-    }
-
-    public Callback<MovieResponse> getNowPlayingMoviesCallback(final int page) {
-        return new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    if (page > Constants.MOVIES_FIRST_PAGE){
-                        view.showMoviesNextPage(response.body());
-                    }else {
-                        view.showMovies(response.body());
-                    }
-                    view.hideRefreshingBar();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-            }
-        };
-    }
-
-    public Callback<MovieResponse> getTopRatedMoviesCallback(final int page) {
+    public Callback<MovieResponse> getMoviesCallback(final int page) {
         return new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {

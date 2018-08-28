@@ -108,8 +108,14 @@ public class DetailsActivity extends Activity implements MovieDetailsView{
     }
 
     public void getMovieDetails() {
-        presenter.getFavoriteMovieIds(SharedPrefsUtil.getPreferencesField(this, Constants.USER_LOGIN_TOKEN));
+        checkIfMovieIsFaved();
         presenter.getMovieDetails(movieId);
+    }
+
+    private void checkIfMovieIsFaved() {
+        if (GoogleLoginManagerImpl.isUserLoggedIn(this)){
+            presenter.getFavoriteMovieIds(SharedPrefsUtil.getPreferencesField(this, Constants.USER_LOGIN_TOKEN));
+        }
     }
 
     @Override

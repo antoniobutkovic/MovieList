@@ -71,6 +71,7 @@ public class GoogleLoginManagerImpl implements GoogleLoginManager {
     }
 
     private void showError() {
+
     }
 
     private void processResult(Intent data, LoginCallback callback) {

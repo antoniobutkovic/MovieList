@@ -1,24 +1,21 @@
-package com.example.toni.movielist.ui.main.favorite;
+package com.example.toni.movielist.ui.main.fragments.categories;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.toni.movielist.App;
@@ -26,45 +23,49 @@ import com.example.toni.movielist.Constants;
 import com.example.toni.movielist.R;
 import com.example.toni.movielist.listener.MovieClickListener;
 import com.example.toni.movielist.listener.MoviesScrollListener;
-import com.example.toni.movielist.model.Movie;
 import com.example.toni.movielist.model.MovieResponse;
-import com.example.toni.movielist.presentation.FavoriteMoviesPresenter;
-import com.example.toni.movielist.presentation.FavoriteMoviesView;
+import com.example.toni.movielist.presentation.MoviesPresenter;
 import com.example.toni.movielist.ui.details.DetailsActivity;
 import com.example.toni.movielist.ui.login.LoginActivity;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManagerImpl;
-import com.example.toni.movielist.ui.main.adapter.MovieRecyclerAdapter;
+import com.example.toni.movielist.ui.main.fragments.adapter.MovieRecyclerAdapter;
 import com.example.toni.movielist.ui.search.SearchActivity;
-import com.example.toni.movielist.util.SharedPrefsUtil;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.toni.movielist.view.MoviesView;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesView, MovieClickListener {
+public class MoviesFragment extends Fragment implements MoviesView, MovieClickListener{
 
     @Inject
-    FavoriteMoviesPresenter presenter;
+    MoviesPresenter presenter;
 
     @BindView(R.id.movies_recyclerview)
     RecyclerView moviesRecyclerView;
 
-    @BindView(R.id.favorite_no_movies_textview)
-    TextView noFavoriteMoviesTv;
+    @BindView(R.id.movies_swipetorefresh)
+    SwipeRefreshLayout refreshLayout;
 
-    private List<Movie> movies;
     private MovieRecyclerAdapter movieRecyclerAdapter;
+    private int currentPage = Constants.MOVIES_FIRST_PAGE;
     private boolean isLoading;
     private MenuItem menuItemSearch;
+    private String currentFragmentName;
+
+    public static MoviesFragment newInstance(String currentFragment) {
+        MoviesFragment upcomingMoviesFragment = new MoviesFragment();
+        Bundle args = new Bundle();
+        args.putString(Constants.CURRENT_FRAGMENT, currentFragment);
+        upcomingMoviesFragment.setArguments(args);
+        return upcomingMoviesFragment;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.favorite_movies_fragment, container, false);
+        return inflater.inflate(R.layout.movies_fragment, container, false);
     }
 
     @Override
@@ -73,9 +74,21 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
         ButterKnife.bind(this, view);
         App.getComponent().inject(this);
         setHasOptionsMenu(true);
+        getCurrentFragmentName();
         presenter.setView(this);
         initRecyclerView();
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getMoviesFirstPage();
+            }
+        });
     }
+
+    private void getCurrentFragmentName() {
+        currentFragmentName = getArguments().getString(Constants.CURRENT_FRAGMENT);
+    }
+
 
     private void initRecyclerView() {
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), Constants.SPAN_COUNT_RV);
@@ -84,6 +97,7 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
             @Override
             protected void loadMoreItems() {
                 incrementCurrentPage();
+                getMoviesNextPage();
                 changeLoadingState(true);
             }
 
@@ -108,6 +122,7 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
     }
 
     private void incrementCurrentPage() {
+        currentPage++;
     }
 
     private void changeLoadingState(boolean isLoading) {
@@ -117,25 +132,31 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
     @Override
     public void onResume() {
         super.onResume();
-        movies = new ArrayList<>();
-        if (GoogleLoginManagerImpl.isUserLoggedIn(getActivity())){
-            getMovies();
-        }else {
-            showSnackbar();
-        }
+        getMoviesFirstPage();
     }
 
-    private void showSnackbar() {
-        Snackbar.make(getActivity().findViewById(android.R.id.content), getString(R.string.login_first_error_message), Snackbar.LENGTH_LONG).setAction(R.string.snackbar_login_button_name, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startLoginActivity();
-            }
-        }).show();
+    private void getMoviesFirstPage(){
+        presenter.getMovies(Constants.MOVIES_FIRST_PAGE, currentFragmentName);
     }
 
-    private void getMovies() {
-        presenter.getFavoriteMovieIds(SharedPrefsUtil.getPreferencesField(getActivity(), Constants.USER_LOGIN_TOKEN));
+    private void getMoviesNextPage(){
+        presenter.getMovies(currentPage, currentFragmentName);
+    }
+
+    @Override
+    public void showMovies(MovieResponse movieResponse) {
+        movieRecyclerAdapter.updateMovies(movieResponse.getMovies());
+    }
+
+    @Override
+    public void showMoviesNextPage(MovieResponse movieResponse) {
+        changeLoadingState(false);
+        movieRecyclerAdapter.addMoreMovies(movieResponse.getMovies());
+    }
+
+    @Override
+    public void hideRefreshingBar() {
+        refreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -146,21 +167,6 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
     @Override
     public void showLogoutFailedMessage() {
         Toast.makeText(getActivity(), R.string.logout_failed_message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showNoFavoriteMoviesMessage() {
-        noFavoriteMoviesTv.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideNoFavoriteMoviesMessage() {
-        noFavoriteMoviesTv.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void showEmptyScreen() {
-        movieRecyclerAdapter.updateMovies(movies);
     }
 
     @Override
@@ -208,14 +214,14 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
         });
     }
 
+    private void closeSearchView() {
+        menuItemSearch.collapseActionView();
+    }
+
     private void startSearchActivity(String query) {
         Intent intent = new Intent(getActivity(), SearchActivity.class);
         intent.putExtra(Constants.SEARCH_QUERY, query);
         startActivity(intent);
-    }
-
-    private void closeSearchView() {
-        menuItemSearch.collapseActionView();
     }
 
     @Override
@@ -240,9 +246,5 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
         Toast.makeText(getActivity(), getResources().getString(R.string.login_first_error_message), Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void showFavoriteMovies(Movie movie) {
-        movies.add(movie);
-        movieRecyclerAdapter.updateMovies(movies);
-    }
+
 }
