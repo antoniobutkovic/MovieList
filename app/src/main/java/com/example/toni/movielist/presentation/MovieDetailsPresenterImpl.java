@@ -1,9 +1,12 @@
 package com.example.toni.movielist.presentation;
 
+import com.example.toni.movielist.Constants;
+import com.example.toni.movielist.R;
 import com.example.toni.movielist.interaction.ApiInteractor;
 import com.example.toni.movielist.interaction.FirebaseCallback;
 import com.example.toni.movielist.interaction.FirebaseInteractor;
 import com.example.toni.movielist.model.MovieDetailsResponse;
+import com.example.toni.movielist.util.SharedPrefsUtil;
 import com.example.toni.movielist.view.MovieDetailsView;
 
 import java.util.List;
@@ -34,8 +37,10 @@ public class MovieDetailsPresenterImpl implements MovieDetailsPresenter{
     }
 
     @Override
-    public void getFavoriteMovieIds(String userId) {
-        firebaseInteractor.getFavoriteMovieIds(getFavoriteMovieIdsCallback(), userId);
+    public void getFavoriteMovieIds(boolean isUserLoggedIn, String userId) {
+        if (isUserLoggedIn){
+            firebaseInteractor.getFavoriteMovieIds(getFavoriteMovieIdsCallback(), userId);
+        }
     }
 
     @Override
@@ -47,7 +52,7 @@ public class MovieDetailsPresenterImpl implements MovieDetailsPresenter{
     public void checkMovieFaveStatus(List<Integer> favoriteMovieIds, int movieIdFromIntent) {
         for (Integer movieId : favoriteMovieIds){
             if (movieId == movieIdFromIntent){
-                view.changeMovieFaveStatus(true);
+                changeMovieFaveStatus(true);
             }
         }
     }
@@ -55,6 +60,31 @@ public class MovieDetailsPresenterImpl implements MovieDetailsPresenter{
     @Override
     public void onDetailsActivityDestroyed() {
         firebaseInteractor.onDestroy();
+    }
+
+    @Override
+    public void handleFavoriteMovieFabClicked(boolean isUserLoggedIn, boolean isFabChecked) {
+        if (isUserLoggedIn){
+            if (isFabChecked){
+                changeMovieFaveStatus(false);
+                view.removeMovieFromFavorites();
+                view.updateDatabase();
+            }else {
+                changeMovieFaveStatus(true);
+                view.addMovieToFavorites();
+                view.updateDatabase();
+            }
+        }else {
+            view.showLoginErrorMessage();
+        }
+    }
+
+    public void changeMovieFaveStatus(boolean isFavorite) {
+        if (isFavorite){
+            view.changeFabToFavoriteState();
+        }else {
+            view.changeFabToUnFavoriteState();
+        }
     }
 
 

@@ -19,4 +19,18 @@ public interface FavoriteMoviesView {
     void hideNoFavoriteMoviesMessage();
 
     void showEmptyScreen();
+
+    void changeLoadingState(boolean b);
+
+    void filterResultsInAdapter(String newText);
+
+    void onLogoutMenuItemClicked();
+
+    void showLoginRequiredMessage();
+
+    void onUserVisible();
+
+    void onUserInvisible();
+
+    void showLoginRequiredSnackbar();
 }

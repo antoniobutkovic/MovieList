@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.FontResourcesParserCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -107,17 +108,26 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
     private void incrementCurrentPage() {
     }
 
-    private void changeLoadingState(boolean isLoading) {
+    @Override
+    public void changeLoadingState(boolean isLoading) {
         this.isLoading = isLoading;
+    }
+
+    @Override
+    public void filterResultsInAdapter(String newText) {
+        movieRecyclerAdapter.getFilter().filter(newText);
+    }
+
+    @Override
+    public void onLogoutMenuItemClicked() {
+        presenter.logoutUser(GoogleLoginManagerImpl.isUserLoggedIn(getActivity()));
     }
 
     @Override
     public void onResume() {
         super.onResume();
         movies = new ArrayList<>();
-        if (GoogleLoginManagerImpl.isUserLoggedIn(getActivity())){
-            getMovies();
-        }
+        getMovies();
     }
 
     @Override
@@ -125,7 +135,8 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
         super.onPause();
     }
 
-    private void showSnackbar() {
+    @Override
+    public void showLoginRequiredSnackbar() {
         Snackbar.make(getActivity().findViewById(android.R.id.content), getString(R.string.login_first_error_message), Snackbar.LENGTH_LONG).setAction(R.string.snackbar_login_button_name, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,7 +146,9 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
     }
 
     private void getMovies() {
-        presenter.getFavoriteMovieIds(SharedPrefsUtil.getPreferencesField(getActivity(), Constants.USER_LOGIN_TOKEN));
+        String uid = SharedPrefsUtil.getPreferencesField(getActivity(), Constants.USER_LOGIN_TOKEN);
+        boolean isUserLoggedIn = GoogleLoginManagerImpl.isUserLoggedIn(getActivity());
+        presenter.getFavoriteMovieIds(uid, isUserLoggedIn);
     }
 
     @Override
@@ -196,13 +209,7 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText.isEmpty()){
-                    changeLoadingState(false);
-                    movieRecyclerAdapter.getFilter().filter(newText);
-                }else {
-                    changeLoadingState(true);
-                    movieRecyclerAdapter.getFilter().filter(newText);
-                }
+                presenter.handleOnSearchTextChange(newText);
                 return false;
             }
         });
@@ -220,24 +227,23 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()){
-            case R.id.options_logout_menu:
-                if (GoogleLoginManagerImpl.isUserLoggedIn(getActivity())){
-                    presenter.logoutUser();
-                }else {
-                    showLoginRequiredMessage();
-                }
-                break;
-            case R.id.options_search_menu:
-                break;
-        }
-
+        presenter.handleOnOptionsItemSelected(item);
         return true;
     }
 
-    private void showLoginRequiredMessage() {
+    @Override
+    public void showLoginRequiredMessage() {
         Toast.makeText(getActivity(), getResources().getString(R.string.login_first_error_message), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onUserVisible() {
+        presenter.checkUserAuthState(GoogleLoginManagerImpl.isUserLoggedIn(getActivity()));
+    }
+
+    @Override
+    public void onUserInvisible() {
+
     }
 
     @Override
@@ -249,10 +255,6 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser){
-            if (!GoogleLoginManagerImpl.isUserLoggedIn(getActivity())){
-                showSnackbar();
-            }
-        }
+        presenter.handleFragmentVisibilityToUser(isVisibleToUser);
     }
 }

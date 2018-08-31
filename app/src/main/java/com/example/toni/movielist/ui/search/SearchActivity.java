@@ -55,9 +55,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView, Mov
 
     private void getDataFromIntent() {
         Intent intent = getIntent();
-        if (intent.hasExtra(Constants.SEARCH_QUERY)){
-            searchQuery = intent.getStringExtra(Constants.SEARCH_QUERY);
-        }
+        presenter.handleDataFromIntent(intent);
     }
 
     private void getSearchedMovies() {
@@ -119,11 +117,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView, Mov
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.search_back_menu:
-                finish();
-                break;
-        }
+        presenter.handleOnOptionsItemSelected(item);
         return true;
     }
 
@@ -136,6 +130,16 @@ public class SearchActivity extends AppCompatActivity implements SearchView, Mov
     public void showMoviesNextPage(MovieResponse movieResponse) {
         changeLoadingState(false);
         searchRecyclerAdapter.addMoreMovies(movieResponse.getMovies());
+    }
+
+    @Override
+    public void setSearchQuery(String searchQuery) {
+        this.searchQuery = searchQuery;
+    }
+
+    @Override
+    public void onMenuBackItemClicked() {
+        finish();
     }
 
     @Override

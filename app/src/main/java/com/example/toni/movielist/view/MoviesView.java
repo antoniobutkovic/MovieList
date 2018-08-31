@@ -15,4 +15,12 @@ public interface MoviesView {
    void showLogoutFailedMessage();
 
    void startLoginActivity();
+
+    void changeLoadingState(boolean b);
+
+   void filterResultsInAdapter(String newText);
+
+   void onLogoutMenuItemClicked();
+
+   void showLoginRequiredMessage();
 }

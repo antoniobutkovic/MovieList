@@ -1,10 +1,14 @@
 package com.example.toni.movielist.presentation;
 
 
+import android.view.MenuItem;
+
 import com.example.toni.movielist.Constants;
+import com.example.toni.movielist.R;
 import com.example.toni.movielist.interaction.ApiInteractor;
 import com.example.toni.movielist.model.MovieResponse;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
+import com.example.toni.movielist.ui.login.helper.GoogleLoginManagerImpl;
 import com.example.toni.movielist.ui.main.LogoutCallback;
 import com.example.toni.movielist.view.MoviesView;
 
@@ -43,6 +47,15 @@ public class MoviesPresenterImpl implements MoviesPresenter{
         }
     }
 
+    @Override
+    public void logoutUser(boolean isUserLoggedIn) {
+        if (isUserLoggedIn){
+            googleLoginManager.logoutUser(getLogoutCallback());
+        }else {
+            view.showLoginRequiredMessage();
+        }
+    }
+
     public void getUpcomingMovies(int page) {
         apiInteractor.getUpcomingMovies(page, getMoviesCallback(page));
     }
@@ -56,8 +69,24 @@ public class MoviesPresenterImpl implements MoviesPresenter{
     }
 
     @Override
-    public void logoutUser() {
-        googleLoginManager.logoutUser(getLogoutCallback());
+    public void handleOnSearchTextChange(String newText) {
+        if (newText.isEmpty()){
+            view.changeLoadingState(false);
+        }else {
+            view.changeLoadingState(true);
+        }
+        view.filterResultsInAdapter(newText);
+    }
+
+    @Override
+    public void handleOnOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.options_logout_menu:
+                view.onLogoutMenuItemClicked();
+                break;
+            case R.id.options_search_menu:
+                break;
+        }
     }
 
     public Callback<MovieResponse> getMoviesCallback(final int page) {

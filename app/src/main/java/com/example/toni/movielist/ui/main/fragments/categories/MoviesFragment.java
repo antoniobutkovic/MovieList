@@ -125,8 +125,19 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieClickLi
         currentPage++;
     }
 
-    private void changeLoadingState(boolean isLoading) {
+    @Override
+    public void changeLoadingState(boolean isLoading) {
         this.isLoading = isLoading;
+    }
+
+    @Override
+    public void filterResultsInAdapter(String newText) {
+        movieRecyclerAdapter.getFilter().filter(newText);
+    }
+
+    @Override
+    public void onLogoutMenuItemClicked() {
+        presenter.logoutUser(GoogleLoginManagerImpl.isUserLoggedIn(getActivity()));
     }
 
     @Override
@@ -202,13 +213,7 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieClickLi
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText.isEmpty()){
-                    changeLoadingState(false);
-                    movieRecyclerAdapter.getFilter().filter(newText);
-                }else {
-                    changeLoadingState(true);
-                    movieRecyclerAdapter.getFilter().filter(newText);
-                }
+                presenter.handleOnSearchTextChange(newText);
                 return false;
             }
         });
@@ -226,25 +231,12 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieClickLi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()){
-            case R.id.options_logout_menu:
-                if (GoogleLoginManagerImpl.isUserLoggedIn(getActivity())){
-                    presenter.logoutUser();
-                }else {
-                    showLoginRequiredMessage();
-                }
-                break;
-            case R.id.options_search_menu:
-                break;
-        }
-
+        presenter.handleOnOptionsItemSelected(item);
         return true;
     }
 
-    private void showLoginRequiredMessage() {
+    @Override
+    public void showLoginRequiredMessage() {
         Toast.makeText(getActivity(), getResources().getString(R.string.login_first_error_message), Toast.LENGTH_SHORT).show();
     }
-
-
 }

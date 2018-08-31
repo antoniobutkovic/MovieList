@@ -1,12 +1,15 @@
 package com.example.toni.movielist.presentation;
 
 import android.util.Log;
+import android.view.MenuItem;
 
+import com.example.toni.movielist.R;
 import com.example.toni.movielist.interaction.ApiInteractor;
 import com.example.toni.movielist.interaction.FirebaseCallback;
 import com.example.toni.movielist.interaction.FirebaseInteractor;
 import com.example.toni.movielist.model.Movie;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
+import com.example.toni.movielist.ui.login.helper.GoogleLoginManagerImpl;
 import com.example.toni.movielist.ui.main.LogoutCallback;
 
 import java.util.List;
@@ -35,13 +38,56 @@ public class FavoriteMoviesPresenterImpl implements FavoriteMoviesPresenter{
     }
 
     @Override
-    public void getFavoriteMovieIds(String uid) {
-        firebaseInteractor.getFavoriteMovieIds(getFavoriteMovieIdsCallback(), uid);
+    public void getFavoriteMovieIds(String uid, boolean isUserLoggedIn) {
+        if (isUserLoggedIn){
+            firebaseInteractor.getFavoriteMovieIds(getFavoriteMovieIdsCallback(), uid);
+        }
     }
 
     @Override
-    public void logoutUser() {
-        googleLoginManager.logoutUser(getLogoutCallback());
+    public void logoutUser(boolean isUserLoggedIn) {
+        if (isUserLoggedIn){
+            googleLoginManager.logoutUser(getLogoutCallback());
+        }else {
+            view.showLoginRequiredMessage();
+        }
+    }
+
+    @Override
+    public void handleOnSearchTextChange(String newText) {
+        if (newText.isEmpty()){
+            view.changeLoadingState(false);
+        }else {
+            view.changeLoadingState(true);
+        }
+        view.filterResultsInAdapter(newText);
+    }
+
+    @Override
+    public void handleOnOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.options_logout_menu:
+                view.onLogoutMenuItemClicked();
+                break;
+            case R.id.options_search_menu:
+                break;
+        }
+    }
+
+    @Override
+    public void handleFragmentVisibilityToUser(boolean isVisibleToUser) {
+        if (isVisibleToUser){
+            view.onUserVisible();
+        }else {
+            view.onUserInvisible();
+        }
+    }
+
+    @Override
+    public void checkUserAuthState(boolean isUserLoggedIn) {
+        if (!isUserLoggedIn){
+            view.showLoginRequiredSnackbar();
+        }
     }
 
     public LogoutCallback getLogoutCallback() {

@@ -44,33 +44,22 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         App.getComponent().inject(this);
 
         presenter.setView(this);
-
         signInButton.setSize(SignInButton.SIZE_WIDE);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        checkUserAuthState();
-    }
-
-    private void checkUserAuthState() {
-        boolean isUserLoggedIn = GoogleLoginManagerImpl.isUserLoggedIn(this);
-        if (isUserLoggedIn){
-            startMovieListActivity();
-        }
+        presenter.checkUserAuthState(GoogleLoginManagerImpl.isUserLoggedIn(this));
     }
 
     @OnClick(R.id.google_sign_in_button)
     public void onSignInBtnClicked(){
-        if (NetworkUtil.isNetworkConnected(this)){
-            signInWithGoogle();
-        }else {
-            showNetworkErrorMessage();
-        }
+        presenter.handleSignInButtonClicked(NetworkUtil.isNetworkConnected(this));
     }
 
-    private void showNetworkErrorMessage() {
+    @Override
+    public void showNetworkErrorMessage() {
         Toast.makeText(this, R.string.no_internet_connection_text, Toast.LENGTH_SHORT).show();
     }
 
@@ -95,15 +84,14 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         SharedPrefsUtil.storePreferencesField(this, Constants.USER_LOGIN_TOKEN, uid);
     }
 
-    private void signInWithGoogle() {
+    @Override
+    public void signInWithGoogle() {
         startActivityForResult(googleLoginManager.getLoginIntent(), Constants.GOOGLE_SIGN_IN_RC);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.GOOGLE_SIGN_IN_RC) {
-            presenter.loginUserWithGoogle(data);
-        }
+        presenter.handleOnActivityResult(requestCode, resultCode, data);
     }
 }

@@ -78,32 +78,26 @@ public class DetailsActivity extends Activity implements MovieDetailsView{
 
     @OnClick(R.id.details_favorite_fab)
     public void onFavoriteMovieFabClicked(){
-        if (GoogleLoginManagerImpl.isUserLoggedIn(this)){
-            if (isFabChecked){
-                changeMovieFaveStatus(false);
-                removeMovieFromFavorites(movieId);
-                presenter.updateDatabase(favoriteMovieIds, SharedPrefsUtil.getPreferencesField(this, Constants.USER_LOGIN_TOKEN));
-            }else {
-                changeMovieFaveStatus(true);
-                addMovieToFavorites(movieId);
-                presenter.updateDatabase(favoriteMovieIds, SharedPrefsUtil.getPreferencesField(this, Constants.USER_LOGIN_TOKEN));
-            }
-        }else {
-            showLoginErrorMessage();
-        }
+        presenter.handleFavoriteMovieFabClicked(GoogleLoginManagerImpl.isUserLoggedIn(this), isFabChecked);
     }
 
-    private void showLoginErrorMessage() {
+    @Override
+    public void showLoginErrorMessage() {
         Toast.makeText(this, getResources().getString(R.string.login_first_error_message), Toast.LENGTH_SHORT).show();
     }
 
-    private void addMovieToFavorites(int movieId) {
-        if (!favoriteMovieIds.contains(movieId)){
-            favoriteMovieIds.add(movieId);
-        }
+    @Override
+    public void addMovieToFavorites() {
+        favoriteMovieIds.add(movieId);
     }
 
-    private void removeMovieFromFavorites(int movieId) {
+    @Override
+    public void updateDatabase() {
+        presenter.updateDatabase(favoriteMovieIds, SharedPrefsUtil.getPreferencesField(this, Constants.USER_LOGIN_TOKEN));
+    }
+
+    @Override
+    public void removeMovieFromFavorites() {
         favoriteMovieIds.remove((Object)movieId);
     }
 
@@ -113,9 +107,7 @@ public class DetailsActivity extends Activity implements MovieDetailsView{
     }
 
     private void checkIfMovieIsFaved() {
-        if (GoogleLoginManagerImpl.isUserLoggedIn(this)){
-            presenter.getFavoriteMovieIds(SharedPrefsUtil.getPreferencesField(this, Constants.USER_LOGIN_TOKEN));
-        }
+        presenter.getFavoriteMovieIds(GoogleLoginManagerImpl.isUserLoggedIn(this), SharedPrefsUtil.getPreferencesField(this, Constants.USER_LOGIN_TOKEN));
     }
 
     @Override
@@ -134,14 +126,15 @@ public class DetailsActivity extends Activity implements MovieDetailsView{
     }
 
     @Override
-    public void changeMovieFaveStatus(boolean isFavorite) {
-        if (isFavorite){
-            favoriteMovieFab.setImageResource(R.drawable.ic_favorite_white_24dp);
-            changeFavoriteFabState(true);
-        }else {
-            favoriteMovieFab.setImageResource(R.drawable.ic_un_favorite_border_white_24dp);
-            changeFavoriteFabState(false);
-        }
+    public void changeFabToFavoriteState() {
+        favoriteMovieFab.setImageResource(R.drawable.ic_favorite_white_24dp);
+        changeFavoriteFabState(true);
+    }
+
+    @Override
+    public void changeFabToUnFavoriteState() {
+        favoriteMovieFab.setImageResource(R.drawable.ic_un_favorite_border_white_24dp);
+        changeFavoriteFabState(false);
     }
 
     private void changeFavoriteFabState(boolean isChecked) {

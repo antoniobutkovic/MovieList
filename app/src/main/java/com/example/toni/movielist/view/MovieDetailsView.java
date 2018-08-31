@@ -12,5 +12,15 @@ public interface MovieDetailsView {
 
     void checkMovieFaveStatus();
 
-    void changeMovieFaveStatus(boolean isFavorite);
+    void showLoginErrorMessage();
+
+    void removeMovieFromFavorites();
+
+    void addMovieToFavorites();
+
+    void updateDatabase();
+
+    void changeFabToFavoriteState();
+
+    void changeFabToUnFavoriteState();
 }

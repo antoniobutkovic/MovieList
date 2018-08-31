@@ -8,4 +8,7 @@ public interface SearchView {
 
     void showMoviesNextPage(MovieResponse movieResponse);
 
+    void setSearchQuery(String searchQuery);
+
+    void onMenuBackItemClicked();
 }

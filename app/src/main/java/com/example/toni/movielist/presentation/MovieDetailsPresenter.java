@@ -8,11 +8,14 @@ public interface MovieDetailsPresenter extends BasePresenter<MovieDetailsView>{
 
     void getMovieDetails(int movieId);
 
-    void getFavoriteMovieIds(String userId);
+    void getFavoriteMovieIds(boolean userLoggedIn, String preferencesField);
 
     void updateDatabase(List<Integer> movieIds, String userId);
 
     void checkMovieFaveStatus(List<Integer> favoriteMovieIds, int movieIdFromIntent);
 
     void onDetailsActivityDestroyed();
+
+    void handleFavoriteMovieFabClicked(boolean isUserLoggedIn, boolean isFabChecked);
+
 }

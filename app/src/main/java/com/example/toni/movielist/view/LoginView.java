@@ -8,4 +8,8 @@ public interface LoginView{
     void startMovieListActivity();
 
     void storeUserLoginToken(String uid);
+
+    void signInWithGoogle();
+
+    void showNetworkErrorMessage();
 }
