@@ -23,4 +23,6 @@ public interface MovieDetailsView {
     void changeFabToFavoriteState();
 
     void changeFabToUnFavoriteState();
+
+    void showNetworkErrorMessage();
 }

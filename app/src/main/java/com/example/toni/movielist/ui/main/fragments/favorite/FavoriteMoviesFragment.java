@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.res.FontResourcesParserCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +32,7 @@ import com.example.toni.movielist.ui.login.LoginActivity;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManagerImpl;
 import com.example.toni.movielist.ui.main.fragments.adapter.MovieRecyclerAdapter;
 import com.example.toni.movielist.ui.search.SearchActivity;
+import com.example.toni.movielist.util.NetworkUtil;
 import com.example.toni.movielist.util.SharedPrefsUtil;
 
 import java.util.ArrayList;
@@ -145,10 +145,16 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
         }).show();
     }
 
+    @Override
+    public void showNetworkErrorMessage() {
+        Toast.makeText(getActivity(), R.string.no_internet_connection_text, Toast.LENGTH_SHORT).show();
+    }
+
     private void getMovies() {
         String uid = SharedPrefsUtil.getPreferencesField(getActivity(), Constants.USER_LOGIN_TOKEN);
         boolean isUserLoggedIn = GoogleLoginManagerImpl.isUserLoggedIn(getActivity());
-        presenter.getFavoriteMovieIds(uid, isUserLoggedIn);
+        boolean isNetworkConnected = NetworkUtil.isNetworkConnected(getActivity());
+        presenter.getFavoriteMovies(uid, isUserLoggedIn, isNetworkConnected);
     }
 
     @Override

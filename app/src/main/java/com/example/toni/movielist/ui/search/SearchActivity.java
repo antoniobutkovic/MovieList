@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.toni.movielist.App;
 import com.example.toni.movielist.Constants;
@@ -18,6 +19,7 @@ import com.example.toni.movielist.model.MovieResponse;
 import com.example.toni.movielist.presentation.SearchPresenter;
 import com.example.toni.movielist.ui.details.DetailsActivity;
 import com.example.toni.movielist.ui.search.adapter.SearchRecyclerAdapter;
+import com.example.toni.movielist.util.NetworkUtil;
 import com.example.toni.movielist.view.SearchView;
 
 import javax.inject.Inject;
@@ -59,7 +61,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView, Mov
     }
 
     private void getSearchedMovies() {
-        presenter.getSearchedMovies(Constants.MOVIES_FIRST_PAGE, searchQuery);
+        presenter.getSearchedMovies(Constants.MOVIES_FIRST_PAGE, searchQuery, NetworkUtil.isNetworkConnected(this));
     }
 
     private void setToolbarTitle() {
@@ -102,7 +104,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView, Mov
     }
 
     private void getSearchedMoviesNextPage() {
-        presenter.getSearchedMovies(currentPage, searchQuery);
+        presenter.getSearchedMovies(currentPage, searchQuery, NetworkUtil.isNetworkConnected(this));
     }
 
     private void changeLoadingState(boolean isLoading) {
@@ -140,6 +142,11 @@ public class SearchActivity extends AppCompatActivity implements SearchView, Mov
     @Override
     public void onMenuBackItemClicked() {
         finish();
+    }
+
+    @Override
+    public void showNetworkErrorMessage() {
+        Toast.makeText(this, R.string.no_internet_connection_text, Toast.LENGTH_SHORT).show();
     }
 
     @Override

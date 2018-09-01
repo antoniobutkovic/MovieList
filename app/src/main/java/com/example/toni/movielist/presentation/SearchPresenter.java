@@ -7,7 +7,7 @@ import com.example.toni.movielist.view.SearchView;
 
 public interface SearchPresenter extends BasePresenter<SearchView>{
 
-    void getSearchedMovies(int page, String query);
+    void getSearchedMovies(int page, String query, boolean isNetworkConnected);
 
     void handleDataFromIntent(Intent intent);
 

@@ -29,8 +29,12 @@ public class SearchPresenterImpl implements SearchPresenter{
     }
 
     @Override
-    public void getSearchedMovies(int page, String query) {
-        apiInteractor.getSearchedMovies(page, getSearchedMoviesCallback(page), query);
+    public void getSearchedMovies(int page, String query, boolean isNetworkConnected) {
+        if (isNetworkConnected){
+            apiInteractor.getSearchedMovies(page, getSearchedMoviesCallback(page), query);
+        }else{
+            view.showNetworkErrorMessage();
+        }
     }
 
     @Override

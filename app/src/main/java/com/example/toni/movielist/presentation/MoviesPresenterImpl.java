@@ -8,7 +8,6 @@ import com.example.toni.movielist.R;
 import com.example.toni.movielist.interaction.ApiInteractor;
 import com.example.toni.movielist.model.MovieResponse;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
-import com.example.toni.movielist.ui.login.helper.GoogleLoginManagerImpl;
 import com.example.toni.movielist.ui.main.LogoutCallback;
 import com.example.toni.movielist.view.MoviesView;
 
@@ -33,7 +32,15 @@ public class MoviesPresenterImpl implements MoviesPresenter{
     }
 
     @Override
-    public void getMovies(int page, String moviesType) {
+    public void getMovies(int page, String moviesType, boolean isNetworkConnected) {
+        if (isNetworkConnected){
+            getMoviesForCorrespodingFragment(page, moviesType);
+        }else {
+            view.showNetworkErrorMessage();
+        }
+    }
+
+    private void getMoviesForCorrespodingFragment(int page, String moviesType) {
         switch (moviesType){
             case Constants.MOVIE_TYPE_UPCOMING:
                 getUpcomingMovies(page);

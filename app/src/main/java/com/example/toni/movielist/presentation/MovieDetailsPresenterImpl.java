@@ -32,8 +32,13 @@ public class MovieDetailsPresenterImpl implements MovieDetailsPresenter{
     }
 
     @Override
-    public void getMovieDetails(int movieId) {
-        apiInteractor.getMovieDetails(movieId, getMovieDetailsCallback());
+    public void getMovieDetails(int movieId, boolean isNetworkConnected) {
+        if (isNetworkConnected){
+            apiInteractor.getMovieDetails(movieId, getMovieDetailsCallback());
+        }else {
+            view.showNetworkErrorMessage();
+        }
+
     }
 
     @Override

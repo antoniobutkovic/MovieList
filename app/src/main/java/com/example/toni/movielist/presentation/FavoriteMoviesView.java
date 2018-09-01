@@ -33,4 +33,6 @@ public interface FavoriteMoviesView {
     void onUserInvisible();
 
     void showLoginRequiredSnackbar();
+
+    void showNetworkErrorMessage();
 }

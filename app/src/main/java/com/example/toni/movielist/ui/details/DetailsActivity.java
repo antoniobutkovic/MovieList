@@ -17,6 +17,7 @@ import com.example.toni.movielist.R;
 import com.example.toni.movielist.model.MovieDetailsResponse;
 import com.example.toni.movielist.presentation.MovieDetailsPresenter;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManagerImpl;
+import com.example.toni.movielist.util.NetworkUtil;
 import com.example.toni.movielist.util.SharedPrefsUtil;
 import com.example.toni.movielist.view.MovieDetailsView;
 
@@ -103,7 +104,7 @@ public class DetailsActivity extends Activity implements MovieDetailsView{
 
     public void getMovieDetails() {
         checkIfMovieIsFaved();
-        presenter.getMovieDetails(movieId);
+        presenter.getMovieDetails(movieId, NetworkUtil.isNetworkConnected(this));
     }
 
     private void checkIfMovieIsFaved() {
@@ -135,6 +136,11 @@ public class DetailsActivity extends Activity implements MovieDetailsView{
     public void changeFabToUnFavoriteState() {
         favoriteMovieFab.setImageResource(R.drawable.ic_un_favorite_border_white_24dp);
         changeFavoriteFabState(false);
+    }
+
+    @Override
+    public void showNetworkErrorMessage() {
+        Toast.makeText(this, R.string.no_internet_connection_text, Toast.LENGTH_SHORT).show();
     }
 
     private void changeFavoriteFabState(boolean isChecked) {

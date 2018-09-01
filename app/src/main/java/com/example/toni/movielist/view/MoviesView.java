@@ -23,4 +23,6 @@ public interface MoviesView {
    void onLogoutMenuItemClicked();
 
    void showLoginRequiredMessage();
+
+    void showNetworkErrorMessage();
 }

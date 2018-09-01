@@ -11,4 +11,6 @@ public interface SearchView {
     void setSearchQuery(String searchQuery);
 
     void onMenuBackItemClicked();
+
+    void showNetworkErrorMessage();
 }

@@ -5,7 +5,7 @@ import android.view.MenuItem;
 
 public interface FavoriteMoviesPresenter extends BasePresenter<FavoriteMoviesView>{
 
-    void getFavoriteMovieIds(String uid, boolean isUserLoggedIn);
+    void getFavoriteMovies(String uid, boolean isUserLoggedIn, boolean isNetworkConnected);
 
     void logoutUser(boolean isUserLoggedIn);
 

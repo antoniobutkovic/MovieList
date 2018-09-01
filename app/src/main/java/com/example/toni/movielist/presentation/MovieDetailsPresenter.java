@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface MovieDetailsPresenter extends BasePresenter<MovieDetailsView>{
 
-    void getMovieDetails(int movieId);
+    void getMovieDetails(int movieId, boolean isNetworkConnected);
 
     void getFavoriteMovieIds(boolean userLoggedIn, String preferencesField);
 

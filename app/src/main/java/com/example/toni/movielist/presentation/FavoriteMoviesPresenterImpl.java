@@ -38,9 +38,13 @@ public class FavoriteMoviesPresenterImpl implements FavoriteMoviesPresenter{
     }
 
     @Override
-    public void getFavoriteMovieIds(String uid, boolean isUserLoggedIn) {
-        if (isUserLoggedIn){
-            firebaseInteractor.getFavoriteMovieIds(getFavoriteMovieIdsCallback(), uid);
+    public void getFavoriteMovies(String uid, boolean isUserLoggedIn, boolean isNetworkConnected) {
+        if (isNetworkConnected){
+            if (isUserLoggedIn){
+                firebaseInteractor.getFavoriteMovieIds(getFavoriteMovieIdsCallback(), uid);
+            }
+        }else {
+            view.showNetworkErrorMessage();
         }
     }
 
