@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -167,5 +168,11 @@ public class DetailsActivity extends Activity implements MovieDetailsView{
     protected void onDestroy() {
         super.onDestroy();
         presenter.onDetailsActivityDestroyed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        presenter.unsubscribe();
     }
 }

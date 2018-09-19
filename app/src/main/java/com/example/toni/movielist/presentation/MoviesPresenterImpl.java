@@ -99,6 +99,11 @@ public class MoviesPresenterImpl implements MoviesPresenter{
         }
     }
 
+    @Override
+    public void unsubscribe() {
+        apiInteractor.unsubscribe();
+    }
+
     public NetworkResponse<MovieResponse> getMoviesCallback(final int page) {
         return new NetworkResponse<MovieResponse>() {
             @Override

@@ -43,7 +43,7 @@ public class MovieDetailsPresenterImpl implements MovieDetailsPresenter{
 
     @Override
     public void updateDatabase(List<Integer> movieIds, String userId) {
-        firebaseInteractor.setFavoriteMovieIds(getFavoriteMovieIdsCallback(), movieIds, userId);
+        firebaseInteractor.setFavoriteMovieIds(movieIds, userId);
     }
 
     @Override
@@ -77,6 +77,11 @@ public class MovieDetailsPresenterImpl implements MovieDetailsPresenter{
         }
     }
 
+    @Override
+    public void unsubscribe() {
+        apiInteractor.unsubscribe();
+    }
+
     public void changeMovieFaveStatus(boolean isFavorite) {
         if (isFavorite){
             view.changeFabToFavoriteState();
@@ -100,16 +105,16 @@ public class MovieDetailsPresenterImpl implements MovieDetailsPresenter{
         };
     }
 
-    public FirebaseCallback getFavoriteMovieIdsCallback() {
-        return new FirebaseCallback() {
+    public NetworkResponse<List<Integer>> getFavoriteMovieIdsCallback() {
+        return new NetworkResponse<List<Integer>>() {
             @Override
-            public void onFavoriteMoviesReadFinished(List<Integer> movieIds) {
-                view.setCurrentFavoriteMovies(movieIds);
+            public void onSuccess(List<Integer> callback) {
+                view.setCurrentFavoriteMovies(callback);
                 view.checkMovieFaveStatus();
             }
 
             @Override
-            public void onFavoriteMoviesReadFailed() {
+            public void onFailure(Throwable t) {
 
             }
         };

@@ -12,4 +12,7 @@ public interface SearchPresenter extends BasePresenter<SearchView>{
     void handleDataFromIntent(Intent intent);
 
     void handleOnOptionsItemSelected(MenuItem item);
+
+    void unsubscribe();
+
 }

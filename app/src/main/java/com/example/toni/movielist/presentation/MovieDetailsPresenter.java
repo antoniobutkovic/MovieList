@@ -18,4 +18,6 @@ public interface MovieDetailsPresenter extends BasePresenter<MovieDetailsView>{
 
     void handleFavoriteMovieFabClicked(boolean isUserLoggedIn, boolean isFabChecked);
 
+    void unsubscribe();
+
 }

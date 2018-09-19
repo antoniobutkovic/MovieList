@@ -88,6 +88,11 @@ public class FavoriteMoviesPresenterImpl implements FavoriteMoviesPresenter{
         }
     }
 
+    @Override
+    public void unsubscribe() {
+        apiInteractor.unsubscribe();
+    }
+
     public LogoutCallback getLogoutCallback() {
         return new LogoutCallback() {
             @Override
@@ -103,15 +108,15 @@ public class FavoriteMoviesPresenterImpl implements FavoriteMoviesPresenter{
         };
     }
 
-    public FirebaseCallback getFavoriteMovieIdsCallback() {
-        return new FirebaseCallback() {
+    public NetworkResponse<List<Integer>> getFavoriteMovieIdsCallback() {
+        return new NetworkResponse<List<Integer>>() {
             @Override
-            public void onFavoriteMoviesReadFinished(List<Integer> movieIds) {
-                getFavoriteMovies(movieIds);
+            public void onSuccess(List<Integer> callback) {
+                getFavoriteMovies(callback);
             }
 
             @Override
-            public void onFavoriteMoviesReadFailed() {
+            public void onFailure(Throwable t) {
                 view.showNoFavoriteMoviesMessage();
                 view.showEmptyScreen();
             }

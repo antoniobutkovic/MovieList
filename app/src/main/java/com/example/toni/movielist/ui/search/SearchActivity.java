@@ -159,4 +159,10 @@ public class SearchActivity extends AppCompatActivity implements SearchView, Mov
         intent.putExtra(Constants.MOVIE_ID, movieId);
         startActivity(intent);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        presenter.unsubscribe();
+    }
 }

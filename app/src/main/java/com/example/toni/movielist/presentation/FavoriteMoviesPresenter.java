@@ -16,4 +16,6 @@ public interface FavoriteMoviesPresenter extends BasePresenter<FavoriteMoviesVie
     void handleFragmentVisibilityToUser(boolean isVisibleToUser);
 
     void checkUserAuthState(boolean isUserLoggedIn);
+
+    void unsubscribe();
 }

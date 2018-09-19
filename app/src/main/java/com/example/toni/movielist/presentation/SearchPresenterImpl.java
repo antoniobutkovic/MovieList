@@ -55,6 +55,11 @@ public class SearchPresenterImpl implements SearchPresenter{
         }
     }
 
+    @Override
+    public void unsubscribe() {
+        apiInteractor.unsubscribe();
+    }
+
     public NetworkResponse<MovieResponse> getSearchedMoviesCallback(final int page) {
         return new NetworkResponse<MovieResponse>() {
             @Override

@@ -245,4 +245,10 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieClickLi
     public void showNetworkErrorMessage() {
         Toast.makeText(getActivity(), R.string.no_internet_connection_text, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.unsubscribe();
+    }
 }

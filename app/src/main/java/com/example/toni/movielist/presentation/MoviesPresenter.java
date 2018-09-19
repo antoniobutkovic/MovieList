@@ -15,4 +15,6 @@ public interface MoviesPresenter extends BasePresenter<MoviesView>{
     void handleOnSearchTextChange(String newText);
 
     void handleOnOptionsItemSelected(MenuItem item);
+
+    void unsubscribe();
 }

@@ -21,4 +21,6 @@ public interface ApiInteractor {
 
     void getMovieById(int movieId, NetworkResponse<Movie> callback);
 
+    void unsubscribe();
+
 }

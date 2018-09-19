@@ -264,4 +264,10 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
             presenter.handleFragmentVisibilityToUser(isVisibleToUser);
         }
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.unsubscribe();
+    }
 }
