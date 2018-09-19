@@ -1,22 +1,16 @@
 package com.example.toni.movielist.presentation;
 
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.toni.movielist.R;
 import com.example.toni.movielist.interaction.ApiInteractor;
-import com.example.toni.movielist.interaction.FirebaseCallback;
 import com.example.toni.movielist.interaction.FirebaseInteractor;
 import com.example.toni.movielist.model.Movie;
+import com.example.toni.movielist.network.NetworkResponse;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
-import com.example.toni.movielist.ui.login.helper.GoogleLoginManagerImpl;
 import com.example.toni.movielist.ui.main.LogoutCallback;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class FavoriteMoviesPresenterImpl implements FavoriteMoviesPresenter{
 
@@ -130,18 +124,16 @@ public class FavoriteMoviesPresenterImpl implements FavoriteMoviesPresenter{
         }
     }
 
-    public Callback<Movie> getFavoriteMoviesCallback() {
-        return new Callback<Movie>() {
+    public NetworkResponse<Movie> getFavoriteMoviesCallback() {
+        return new NetworkResponse<Movie>() {
             @Override
-            public void onResponse(Call<Movie> call, Response<Movie> response) {
-                if (response.isSuccessful() && response.body() != null){
-                    view.showFavoriteMovies(response.body());
-                    view.hideNoFavoriteMoviesMessage();
-                }
+            public void onSuccess(Movie response) {
+                view.showFavoriteMovies(response);
+                view.hideNoFavoriteMoviesMessage();
             }
 
             @Override
-            public void onFailure(Call<Movie> call, Throwable t) {
+            public void onFailure(Throwable t) {
 
             }
         };

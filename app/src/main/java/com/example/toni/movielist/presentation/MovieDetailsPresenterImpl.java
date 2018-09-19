@@ -1,19 +1,12 @@
 package com.example.toni.movielist.presentation;
 
-import com.example.toni.movielist.Constants;
-import com.example.toni.movielist.R;
 import com.example.toni.movielist.interaction.ApiInteractor;
-import com.example.toni.movielist.interaction.FirebaseCallback;
 import com.example.toni.movielist.interaction.FirebaseInteractor;
 import com.example.toni.movielist.model.MovieDetailsResponse;
-import com.example.toni.movielist.util.SharedPrefsUtil;
+import com.example.toni.movielist.network.NetworkResponse;
 import com.example.toni.movielist.view.MovieDetailsView;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MovieDetailsPresenterImpl implements MovieDetailsPresenter{
 
@@ -93,17 +86,15 @@ public class MovieDetailsPresenterImpl implements MovieDetailsPresenter{
     }
 
 
-    public Callback<MovieDetailsResponse> getMovieDetailsCallback() {
-        return new Callback<MovieDetailsResponse>() {
+    public NetworkResponse<MovieDetailsResponse> getMovieDetailsCallback() {
+        return new NetworkResponse<MovieDetailsResponse>() {
             @Override
-            public void onResponse(Call<MovieDetailsResponse> call, Response<MovieDetailsResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    view.showMovieDetails(response.body());
-                }
+            public void onSuccess(MovieDetailsResponse response) {
+                view.showMovieDetails(response);
             }
 
             @Override
-            public void onFailure(Call<MovieDetailsResponse> call, Throwable t) {
+            public void onFailure(Throwable t) {
 
             }
         };

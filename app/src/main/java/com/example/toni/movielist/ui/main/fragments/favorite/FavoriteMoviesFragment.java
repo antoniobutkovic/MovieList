@@ -260,7 +260,8 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        presenter.handleFragmentVisibilityToUser(isVisibleToUser);
+        if (presenter != null){
+            presenter.handleFragmentVisibilityToUser(isVisibleToUser);
+        }
     }
 }

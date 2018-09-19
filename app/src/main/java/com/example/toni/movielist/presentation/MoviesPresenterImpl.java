@@ -7,9 +7,12 @@ import com.example.toni.movielist.Constants;
 import com.example.toni.movielist.R;
 import com.example.toni.movielist.interaction.ApiInteractor;
 import com.example.toni.movielist.model.MovieResponse;
+import com.example.toni.movielist.network.NetworkResponse;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManager;
 import com.example.toni.movielist.ui.main.LogoutCallback;
 import com.example.toni.movielist.view.MoviesView;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,22 +99,21 @@ public class MoviesPresenterImpl implements MoviesPresenter{
         }
     }
 
-    public Callback<MovieResponse> getMoviesCallback(final int page) {
-        return new Callback<MovieResponse>() {
+    public NetworkResponse<MovieResponse> getMoviesCallback(final int page) {
+        return new NetworkResponse<MovieResponse>() {
             @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
+            public void onSuccess(
+                    MovieResponse response) {
                     if (page > Constants.MOVIES_FIRST_PAGE){
-                        view.showMoviesNextPage(response.body());
+                        view.showMoviesNextPage(response);
                     }else {
-                        view.showMovies(response.body());
+                        view.showMovies(response);
                     }
                     view.hideRefreshingBar();
-                }
             }
 
             @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
+            public void onFailure(Throwable t) {
 
             }
         };

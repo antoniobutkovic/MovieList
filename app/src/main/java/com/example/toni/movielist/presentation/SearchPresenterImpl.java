@@ -8,6 +8,7 @@ import com.example.toni.movielist.Constants;
 import com.example.toni.movielist.R;
 import com.example.toni.movielist.interaction.ApiInteractor;
 import com.example.toni.movielist.model.MovieResponse;
+import com.example.toni.movielist.network.NetworkResponse;
 import com.example.toni.movielist.view.SearchView;
 
 import retrofit2.Call;
@@ -54,19 +55,19 @@ public class SearchPresenterImpl implements SearchPresenter{
         }
     }
 
-    public Callback<MovieResponse> getSearchedMoviesCallback(final int page) {
-        return new Callback<MovieResponse>() {
+    public NetworkResponse<MovieResponse> getSearchedMoviesCallback(final int page) {
+        return new NetworkResponse<MovieResponse>() {
             @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+            public void onSuccess(MovieResponse response) {
                 if (page > Constants.MOVIES_FIRST_PAGE){
-                    view.showMoviesNextPage(response.body());
+                    view.showMoviesNextPage(response);
                 }else {
-                    view.showMovies(response.body());
+                    view.showMovies(response);
                 }
             }
 
             @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
+            public void onFailure(Throwable t) {
 
             }
         };

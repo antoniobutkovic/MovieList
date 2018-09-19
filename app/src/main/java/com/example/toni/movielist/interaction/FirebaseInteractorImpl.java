@@ -1,10 +1,8 @@
 package com.example.toni.movielist.interaction;
 
-import android.support.annotation.NonNull;
 
 import com.example.toni.movielist.Constants;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.toni.movielist.network.NetworkResponse;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,16 +22,16 @@ public class FirebaseInteractorImpl implements FirebaseInteractor{
 
 
     @Override
-    public void getFavoriteMovieIds(final FirebaseCallback callback, final String userId) {
+    public void getFavoriteMovieIds(final NetworkResponse<List<Integer>> callback, final String userId) {
         databaseReference.addListenerForSingleValueEvent(valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<List<Integer>> genericTypeIndicator = new GenericTypeIndicator<List<Integer>>() {};
                 List<Integer> movieIds = dataSnapshot.child(userId).child(Constants.MOVIE_ID_FB_PATH).getValue(genericTypeIndicator);
                 if (movieIds != null){
-                    callback.onFavoriteMoviesReadFinished(movieIds);
+                    callback.onSuccess(movieIds);
                 }else {
-                    callback.onFavoriteMoviesReadFailed();
+                    callback.onFailure(new NullPointerException());
                 }
             }
 
@@ -45,7 +43,7 @@ public class FirebaseInteractorImpl implements FirebaseInteractor{
     }
 
     @Override
-    public void setFavoriteMovieIds(final FirebaseCallback callback, List<Integer> movieIds, String userId) {
+    public void setFavoriteMovieIds(List<Integer> movieIds, String userId) {
         databaseReference.child(userId).child(Constants.MOVIE_ID_FB_PATH).setValue(movieIds);
     }
 
