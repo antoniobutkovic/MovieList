@@ -10,7 +10,7 @@ import com.example.toni.movielist.network.NetworkResponse;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class ApiInteractorImpl implements ApiInteractor{
@@ -28,20 +28,15 @@ public class ApiInteractorImpl implements ApiInteractor{
         compositeDisposable.add(apiService.getNowPlayingMovies(Constants.API_KEY, page)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<MovieResponse>() {
-
+                .subscribeWith(new DisposableSingleObserver<MovieResponse>() {
                     @Override
-                    public void onNext(MovieResponse movieResponse) {
+                    public void onSuccess(MovieResponse movieResponse) {
                         callback.onSuccess(movieResponse);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         callback.onFailure(e);
-                    }
-
-                    @Override
-                    public void onComplete() {
                     }
                 }));
     }
@@ -50,21 +45,15 @@ public class ApiInteractorImpl implements ApiInteractor{
     public void getTopRatedMovies(int page, final NetworkResponse<MovieResponse> callback) {
         compositeDisposable.add(apiService.getTopRatedMovies(Constants.API_KEY, page).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<MovieResponse>() {
-
+                .subscribeWith(new DisposableSingleObserver<MovieResponse>() {
                     @Override
-                    public void onNext(MovieResponse movieResponse) {
+                    public void onSuccess(MovieResponse movieResponse) {
                         callback.onSuccess(movieResponse);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         callback.onFailure(e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-
                     }
                 }));
     }
@@ -73,21 +62,15 @@ public class ApiInteractorImpl implements ApiInteractor{
     public void getUpcomingMovies(int page, final NetworkResponse<MovieResponse> callback) {
         compositeDisposable.add(apiService.getUpcomingMovies(Constants.API_KEY, page).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<MovieResponse>() {
-
+                .subscribeWith(new DisposableSingleObserver<MovieResponse>() {
                     @Override
-                    public void onNext(MovieResponse movieResponse) {
+                    public void onSuccess(MovieResponse movieResponse) {
                         callback.onSuccess(movieResponse);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         callback.onFailure(e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-
                     }
                 }));
     }
@@ -97,21 +80,15 @@ public class ApiInteractorImpl implements ApiInteractor{
         compositeDisposable.add(apiService.getMovieDetails(movieId, Constants.API_KEY).
                 subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<MovieDetailsResponse>() {
-
+                .subscribeWith(new DisposableSingleObserver<MovieDetailsResponse>() {
                     @Override
-                    public void onNext(MovieDetailsResponse movieDetailsResponse) {
+                    public void onSuccess(MovieDetailsResponse movieDetailsResponse) {
                         callback.onSuccess(movieDetailsResponse);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         callback.onFailure(e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-
                     }
                 }));
     }
@@ -120,21 +97,15 @@ public class ApiInteractorImpl implements ApiInteractor{
     public void getSearchedMovies(int page, final NetworkResponse<MovieResponse> callback, String query) {
         compositeDisposable.add(apiService.getSearchedMovies(Constants.API_KEY, query, page).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<MovieResponse>() {
-
+                .subscribeWith(new DisposableSingleObserver<MovieResponse>() {
                     @Override
-                    public void onNext(MovieResponse movieResponse) {
+                    public void onSuccess(MovieResponse movieResponse) {
                         callback.onSuccess(movieResponse);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         callback.onFailure(e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-
                     }
                 }));
     }
@@ -143,10 +114,9 @@ public class ApiInteractorImpl implements ApiInteractor{
     public void getMovieById(int movieId, final NetworkResponse<Movie> callback) {
         compositeDisposable.add(apiService.getMovieById(movieId, Constants.API_KEY).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Movie>() {
-
+                .subscribeWith(new DisposableSingleObserver<Movie>() {
                     @Override
-                    public void onNext(Movie movie) {
+                    public void onSuccess(Movie movie) {
                         callback.onSuccess(movie);
                     }
 
@@ -155,10 +125,6 @@ public class ApiInteractorImpl implements ApiInteractor{
                         callback.onFailure(e);
                     }
 
-                    @Override
-                    public void onComplete() {
-
-                    }
                 }));
     }
 
