@@ -17,6 +17,7 @@ import com.example.toni.movielist.Constants;
 import com.example.toni.movielist.R;
 import com.example.toni.movielist.model.MovieDetailsResponse;
 import com.example.toni.movielist.presentation.MovieDetailsPresenter;
+import com.example.toni.movielist.ui.details.view.MovieDetailsCustomView;
 import com.example.toni.movielist.ui.login.helper.GoogleLoginManagerImpl;
 import com.example.toni.movielist.util.NetworkUtil;
 import com.example.toni.movielist.util.SharedPrefsUtil;
@@ -41,13 +42,13 @@ public class DetailsActivity extends Activity implements MovieDetailsView{
     Toolbar toolbar;
 
     @BindView(R.id.details_vote_textview)
-    TextView voteTv;
+    MovieDetailsCustomView voteTv;
 
     @BindView(R.id.details_release_date_textview)
-    TextView dateTv;
+    MovieDetailsCustomView dateTv;
 
     @BindView(R.id.details_overview_textview)
-    TextView overviewTv;
+    MovieDetailsCustomView overviewTv;
 
     @BindView(R.id.details_poster_imageview)
     ImageView posterIv;
@@ -151,9 +152,9 @@ public class DetailsActivity extends Activity implements MovieDetailsView{
     private void setUpDetails(MovieDetailsResponse details) {
         String posterUrl = Constants.IMAGES_BASE_URL + details.getPosterPath();
         Glide.with(getApplicationContext()).load(posterUrl).into(posterIv);
-        voteTv.setText(String.valueOf(details.getVote()));
-        dateTv.setText(String.valueOf(details.getReleaseDate()));
-        overviewTv.setText(String.valueOf(details.getOverview()));
+        voteTv.initFields(getString(R.string.title_details_text), String.valueOf(details.getVote()));
+        dateTv.initFields(getString(R.string.date_details_text) ,details.getReleaseDate().toString());
+        overviewTv.initFields(getString(R.string.overview_details_text), details.getOverview().toString());
         toolbar.setTitle(details.getTitle());
     }
 

@@ -46,19 +46,19 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp">
 
-            <TextView
+            <com.example.toni.movielist.ui.details.view.MovieDetailsCustomView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/details_vote_textview"
                 android:layout_marginTop="20dp"/>
 
-            <TextView
+            <com.example.toni.movielist.ui.details.view.MovieDetailsCustomView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/details_release_date_textview"
                 android:layout_marginTop="20dp"/>
 
-            <TextView
+            <com.example.toni.movielist.ui.details.view.MovieDetailsCustomView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/details_overview_textview"

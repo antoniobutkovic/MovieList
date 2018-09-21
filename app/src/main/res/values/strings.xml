@@ -7,4 +7,7 @@
     <string name="login_first_error_message">Please login first.</string>
     <string name="snackbar_login_button_name">LOGIN</string>
     <string name="no_fav_movies_message">No favorite movies added yet.</string>
+    <string name="title_details_text">Rating</string>
+    <string name="date_details_text">Release date</string>
+    <string name="overview_details_text">Overview</string>
 </resources>
