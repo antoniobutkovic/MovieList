@@ -1,6 +1,7 @@
 package com.example.toni.movielist.presentation;
 
 
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.toni.movielist.Constants;
@@ -79,13 +80,12 @@ public class MoviesPresenterImpl implements MoviesPresenter{
     }
 
     @Override
-    public void handleOnSearchTextChange(String newText) {
-        if (newText.isEmpty()){
-            view.changeLoadingState(false);
+    public void handleOnSearchTextChange(String searchQuery) {
+        if (searchQuery.isEmpty()){
+            view.setupUiAfterSearchIsFinished();
         }else {
-            view.changeLoadingState(true);
+            apiInteractor.getSearchedMovies(searchQuery, getSearchedMoviesCallback());
         }
-        view.filterResultsInAdapter(newText);
     }
 
     @Override
@@ -135,6 +135,20 @@ public class MoviesPresenterImpl implements MoviesPresenter{
             @Override
             public void onLogoutFailed() {
                 view.showLogoutFailedMessage();
+            }
+        };
+    }
+
+    public NetworkResponse<MovieResponse> getSearchedMoviesCallback() {
+        return new NetworkResponse<MovieResponse>() {
+            @Override
+            public void onSuccess(MovieResponse callback) {
+                view.updateUiWithSearchedResults(callback);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                view.showNetworkErrorMessage();
             }
         };
     }

@@ -78,12 +78,7 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieClickLi
         getCurrentFragmentName();
         presenter.setView(this);
         initRecyclerView();
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getMoviesFirstPage();
-            }
-        });
+        refreshLayout.setOnRefreshListener(() -> getMoviesFirstPage());
     }
 
     private void getCurrentFragmentName() {
@@ -126,14 +121,8 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieClickLi
         currentPage++;
     }
 
-    @Override
     public void changeLoadingState(boolean isLoading) {
         this.isLoading = isLoading;
-    }
-
-    @Override
-    public void filterResultsInAdapter(String newText) {
-        movieRecyclerAdapter.getFilter().filter(newText);
     }
 
     @Override
@@ -244,6 +233,16 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieClickLi
     @Override
     public void showNetworkErrorMessage() {
         Toast.makeText(getActivity(), R.string.no_internet_connection_text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updateUiWithSearchedResults(MovieResponse movieResponse) {
+        movieRecyclerAdapter.updateMovies(movieResponse.getMovies());
+    }
+
+    @Override
+    public void setupUiAfterSearchIsFinished() {
+        getMoviesFirstPage();
     }
 
     @Override

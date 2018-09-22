@@ -37,6 +37,7 @@ import com.example.toni.movielist.util.SharedPrefsUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -192,6 +193,7 @@ public class FavoriteMoviesFragment extends Fragment implements FavoriteMoviesVi
     public void onMovieClicked(int movieId) {
         startDetailsActivity(movieId);
         closeSearchView();
+
     }
 
     private void startDetailsActivity(int movieId) {

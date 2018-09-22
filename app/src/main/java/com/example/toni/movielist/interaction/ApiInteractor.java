@@ -21,6 +21,8 @@ public interface ApiInteractor {
 
     void getMovieById(int movieId, NetworkResponse<Movie> callback);
 
+    void getSearchedMovies(String searchQuery, NetworkResponse<MovieResponse> callback);
+
     void unsubscribe();
 
 }

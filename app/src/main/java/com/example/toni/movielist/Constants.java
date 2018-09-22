@@ -19,4 +19,5 @@ public class Constants {
     public static final String MOVIE_ID_FB_PATH = "FavoriteMovieIds";
     public static final String USER_LOGIN_TOKEN = "token";
     public static final String CURRENT_FRAGMENT = "currentfragment";
+    public static final int DEBOUNCE_TIME = 300;
 }

@@ -16,13 +16,13 @@ public interface MoviesView {
 
    void startLoginActivity();
 
-    void changeLoadingState(boolean b);
-
-   void filterResultsInAdapter(String newText);
-
    void onLogoutMenuItemClicked();
 
    void showLoginRequiredMessage();
 
-    void showNetworkErrorMessage();
+   void showNetworkErrorMessage();
+
+   void updateUiWithSearchedResults(MovieResponse movieResponse);
+
+   void setupUiAfterSearchIsFinished();
 }
